@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="registrados" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9fe6e54-42e5-4958-a785-572801a79fb3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="Numero" class="java.lang.String"/>
+	<field name="TipoDocumento" class="java.lang.String"/>
+	<field name="Documento" class="java.lang.String"/>
+	<field name="Nombre" class="java.lang.String"/>
+	<field name="Apellido" class="java.lang.String"/>
+	<field name="FechaNacimiento" class="java.lang.String"/>
+	<field name="Edad" class="java.lang.String"/>
+	<field name="Sexo" class="java.lang.String"/>
+	<field name="CiudadResi" class="java.lang.String"/>
+	<field name="EPS" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="78" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="f53a554c-d3d9-44c5-b2de-d10b32477ce7" x="312" y="18" width="179" height="42"/>
+				<textElement>
+					<font size="26" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Registrados]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="36" splitType="Stretch">
+			<staticText>
+				<reportElement uuid="130fc504-a9e1-410b-9a68-7b7ba00316a7" x="53" y="0" width="85" height="20"/>
+				<textElement/>
+				<text><![CDATA[Tipo Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="40288c7f-00e4-40e6-96b4-83f767e8327d" x="247" y="0" width="65" height="20"/>
+				<textElement/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="bd50f207-8385-4a5b-8ed7-ab32b95417df" x="326" y="0" width="65" height="20"/>
+				<textElement/>
+				<text><![CDATA[Apellido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ed750cb7-e1bb-403c-8b62-15629df32f5a" x="514" y="0" width="66" height="20"/>
+				<textElement/>
+				<text><![CDATA[Edad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="adf422ff-e4af-4899-8b1d-c2ca120f3d33" x="594" y="0" width="50" height="20"/>
+				<textElement/>
+				<text><![CDATA[Sexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="2927228c-f919-4082-bc87-554f05764bd2" x="748" y="0" width="54" height="20"/>
+				<textElement/>
+				<text><![CDATA[EPS]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="173bcf8b-8936-4963-af15-16c9c664f579" x="0" y="0" width="39" height="20"/>
+				<textElement/>
+				<text><![CDATA[Numero]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="f8a1719e-349c-4f0f-90f8-ea8f8cca8ddd" x="147" y="0" width="73" height="20"/>
+				<textElement/>
+				<text><![CDATA[Documento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="ba27c87a-3290-473b-8213-c5df50a94dc6" x="404" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[FechaNacimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="10b9ee25-652d-4995-9526-c27f59862fe9" x="658" y="0" width="68" height="20"/>
+				<textElement/>
+				<text><![CDATA[CiudadResi]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement uuid="3deb51ec-fc1c-4585-9f94-4c5649c40b45" x="247" y="0" width="65" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="ba1619d1-b108-45eb-ac4b-01f632b2cdbe" x="326" y="0" width="65" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Apellido}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="14bf6c86-6b50-4dae-8d0b-1a943498a76c" x="514" y="0" width="56" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Edad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8ba64c68-d8a7-49c7-ae29-412f08aa6772" x="594" y="0" width="50" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Sexo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c4f61f9b-02e6-4398-8be9-3323f8165644" x="748" y="0" width="54" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{EPS}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="0f5d4e6b-99d7-43bd-babc-409781625560" x="0" y="0" width="39" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="bf607e2a-3ff6-4600-bcca-4a1194079879" x="147" y="0" width="73" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Documento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="d29ddee0-2b02-4f08-a04e-fb06b030db86" x="47" y="0" width="91" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{TipoDocumento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="c204a50d-c1ed-4452-8aff-dc7c943812b2" x="404" y="0" width="87" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{FechaNacimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="a4b99286-f90b-483f-b8cd-61fef3db55bd" x="658" y="0" width="68" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{CiudadResi}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
