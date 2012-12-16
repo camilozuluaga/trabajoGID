@@ -5,6 +5,7 @@
 package proyecto;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.URL;
@@ -12,19 +13,10 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -40,11 +32,13 @@ public class Interfaz extends javax.swing.JFrame {
     public String line;
     FileWriter fichero = null;
     PrintWriter pw = null;
-    URL url=this.getClass().getResource("/archivo/registrados.jasper");
+   
     
+    String fila;
+    String []posiciones;
     /*la he puesto asi o tambien le coloco el getFile pero da igual 
      * no me sale error pero no deja cargar el archivo */
-    File file = new File("/archivo/registro.txt"); 
+    File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"); 
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
@@ -114,6 +108,11 @@ public class Interfaz extends javax.swing.JFrame {
         jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnGuardar.setText("Guardar Usuario");
+        btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                btnGuardarMouseReleased(evt);
+            }
+        });
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnGuardarActionPerformed(evt);
@@ -151,6 +150,12 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel8.setText("EPS");
         jLabel8.setBounds(400, 160, 50, 30);
         jLayeredPane1.add(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtIdentificacion.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtIdentificacionKeyReleased(evt);
+            }
+        });
         txtIdentificacion.setBounds(510, 20, 190, 30);
         jLayeredPane1.add(txtIdentificacion, javax.swing.JLayeredPane.DEFAULT_LAYER);
         txtApellidos.setBounds(510, 60, 190, 30);
@@ -261,29 +266,61 @@ public class Interfaz extends javax.swing.JFrame {
         /*metodo para guardar el archivo */
         SaveFile(";", file);
 
+        
+        txtIdentificacion.setText("");
+        txtNombre.setText("");
+        txtApellidos.setText("");
+      
 
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-        Datos dato = new Datos(file);
-        metodo.addDatos(dato);
-        try {
-            JasperReport reporte = (JasperReport) JRLoader.loadObject(url);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, metodo);
-            JRExporter exporter = new JRPdfExporter();
-            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Registrados.pdf"));
-            exporter.exportReport();
-
-            JasperViewer viewer = new JasperViewer(jasperPrint);
-            viewer.setTitle("Registrados");
-            viewer.setVisible(true);
-        } catch (JRException ex) {
-            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            System.out.println("error generando el reporte ");
-        }
+//        Datos dato = new Datos(file);
+//        metodo.addDatos(dato);
+//        try {
+//            JasperReport reporte = (JasperReport) JRLoader.loadObject(url);
+//            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, metodo);
+//            JRExporter exporter = new JRPdfExporter();
+//            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+//            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Registrados.pdf"));
+//            exporter.exportReport();
+//
+//            JasperViewer viewer = new JasperViewer(jasperPrint);
+//            viewer.setTitle("Registrados");
+//            viewer.setVisible(true);
+//        } catch (JRException ex) {
+//            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+//            System.out.println("error generando el reporte ");
+//        }
     }//GEN-LAST:event_btnInformeActionPerformed
+
+    private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
+        try {
+            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            while (scan.hasNext()) {
+                fila = scan.nextLine();
+                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                posiciones = fila.split(";");
+                for (int i = 1; i < 2; i++) {
+                    if (posiciones[i].equals(txtIdentificacion.getText())) {
+                        JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
+                                ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
+                        btnGuardar.setEnabled(false);
+                        txtIdentificacion.setText("");
+                    }
+                }
+                posiciones = null;
+            }
+        } catch (FileNotFoundException x) {
+            System.out.println("No se pudo encontrar el archivo");
+        }
+
+    }//GEN-LAST:event_txtIdentificacionKeyReleased
+
+    private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
+       btnGuardar.setEnabled(true);
+    }//GEN-LAST:event_btnGuardarMouseReleased
 
     /**
      * @param args the command line arguments

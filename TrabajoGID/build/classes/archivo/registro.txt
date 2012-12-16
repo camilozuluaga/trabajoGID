@@ -1,1 +1,3 @@
 Cedula;1113310128;juan camilo;zuluaga serna;24/feb/1994;18;Masculino;Sevilla;Casur;
+Cedula;29331443;gloria patricia;serna ;11/abr/1969;43;Femenino;Sevilla;Casur;
+Cedula;1113306890;deiby leandro ;zuluaga serna;08/ago/1991;21;Masculino;Sevilla;Emssanar;
