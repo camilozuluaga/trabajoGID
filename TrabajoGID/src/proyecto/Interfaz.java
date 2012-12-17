@@ -4,25 +4,32 @@
  */
 package proyecto;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author jucazuse
  */
 public class Interfaz extends javax.swing.JFrame {
+    
     
     Metodos metodo;
     public int acomulador = 1;
@@ -32,7 +39,7 @@ public class Interfaz extends javax.swing.JFrame {
     public String line;
     FileWriter fichero = null;
     PrintWriter pw = null;
-   
+  
     
     String fila;
     String []posiciones;
@@ -42,7 +49,12 @@ public class Interfaz extends javax.swing.JFrame {
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
-
+    DefaultTableModel modeloTabla;
+    private TableRowSorter trsfiltro;
+    private String filtro;
+    int columna;
+    
+      static ArrayList rosterList = new ArrayList();
     /**
      * Creates new form Interfaz
      */
@@ -52,6 +64,9 @@ public class Interfaz extends javax.swing.JFrame {
         llenarCbCiudadResidencia();
         llenarCbEPS();
        
+       
+    
+     
         metodo=new Metodos();
     }
 
@@ -86,10 +101,10 @@ public class Interfaz extends javax.swing.JFrame {
         cbEPS = new javax.swing.JComboBox();
         jLayeredPane2 = new javax.swing.JLayeredPane();
         jLabel9 = new javax.swing.JLabel();
-        txtBuscar = new javax.swing.JTextField();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTRegistro = new javax.swing.JTable();
         btnInforme = new javax.swing.JButton();
+        txtBuscar = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -179,15 +194,13 @@ public class Interfaz extends javax.swing.JFrame {
         jLabel9.setText("Buscar Usuarios por Cedula");
         jLabel9.setBounds(10, 30, 160, 30);
         jLayeredPane2.add(jLabel9, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        txtBuscar.setBounds(180, 30, 200, 30);
-        jLayeredPane2.add(txtBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jTRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
 
             },
             new String [] {
-                "#", "Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Sexo", "Ciudad Residencia", "EPS"
+                "#", "Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Sexo", "Ciudad Residencia", ""
             }
         ) {
             boolean[] canEdit = new boolean [] {
@@ -200,7 +213,7 @@ public class Interfaz extends javax.swing.JFrame {
         });
         jScrollPane2.setViewportView(jTRegistro);
 
-        jScrollPane2.setBounds(10, 70, 1070, 120);
+        jScrollPane2.setBounds(10, 70, 1080, 120);
         jLayeredPane2.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         btnInforme.setText("Informe de Usuario");
@@ -211,6 +224,14 @@ public class Interfaz extends javax.swing.JFrame {
         });
         btnInforme.setBounds(20, 260, 160, 30);
         jLayeredPane2.add(btnInforme, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyPressed(evt);
+            }
+        });
+        txtBuscar.setBounds(170, 30, 190, 30);
+        jLayeredPane2.add(txtBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -251,8 +272,8 @@ public class Interfaz extends javax.swing.JFrame {
         sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
 
         /*con este metodo le damos el modelo a la tabla */
-        DefaultTableModel modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-
+        
+         modeloTabla = (DefaultTableModel) jTRegistro.getModel();
         /* con esto llenamos la tabla  */
         Object nuevo[] = {
             acomulador++, cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
@@ -293,34 +314,27 @@ public class Interfaz extends javax.swing.JFrame {
 //            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
 //            System.out.println("error generando el reporte ");
 //        }
+      
+       
+    
+       
+
+
+
+         
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
-        try {
-            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
-            while (scan.hasNext()) {
-                fila = scan.nextLine();
-                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
-                posiciones = fila.split(";");
-                for (int i = 1; i < 2; i++) {
-                    if (posiciones[i].equals(txtIdentificacion.getText())) {
-                        JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
-                                ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
-                        btnGuardar.setEnabled(false);
-                        txtIdentificacion.setText("");
-                    }
-                }
-                posiciones = null;
-            }
-        } catch (FileNotFoundException x) {
-            System.out.println("No se pudo encontrar el archivo");
-        }
-
+       leerArchivo();
     }//GEN-LAST:event_txtIdentificacionKeyReleased
 
     private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_btnGuardarMouseReleased
+
+    private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
+       
+    }//GEN-LAST:event_txtBuscarKeyPressed
 
     /**
      * @param args the command line arguments
@@ -440,6 +454,7 @@ public class Interfaz extends javax.swing.JFrame {
             //se guarda linea por linea en el archivo
             while (st.hasMoreTokens()) {
                 line = st.nextToken();
+               
                 pw.print(cbIdentificacion.getSelectedItem());
                 pw.print(";");
                 pw.print(txtIdentificacion.getText());
@@ -472,5 +487,54 @@ public class Interfaz extends javax.swing.JFrame {
                 e2.printStackTrace();
             }
         }
+    }
+
+    public void leerArchivo() {
+        try {
+            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            while (scan.hasNext()) {
+                fila = scan.nextLine();
+                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                posiciones = fila.split(";");
+                for (int i =0; i < posiciones.length; i++) {
+                    if (posiciones[i].equals(txtIdentificacion.getText())) {
+                        JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
+                                ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
+                        btnGuardar.setEnabled(false);
+                        txtIdentificacion.setText("");
+                       
+                    }
+                   
+                }
+                posiciones = null;
+            }
+        } catch (FileNotFoundException x) {
+            System.out.println("No se pudo encontrar el archivo");
+        }
+    }
+
+       public void cargarTabla() {
+
+        modeloTabla = (DefaultTableModel) jTRegistro.getModel();
+        BufferedReader br = null;
+        try {
+            br = new BufferedReader(new FileReader("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            line = br.readLine();
+            for (int row = 0; row < 1; row++) {
+                for (int column = 0; column < 9; column++) {
+                    while (line != null) {
+                        String[] rowfields = line.split(";");
+                        
+                        modeloTabla.addRow(rowfields);
+                        line = br.readLine();
+                    }
+
+                }
+            }
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+
     }
 }
