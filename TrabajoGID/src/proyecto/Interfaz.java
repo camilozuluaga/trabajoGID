@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -18,8 +17,6 @@ import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -31,7 +28,7 @@ import javax.swing.table.TableRowSorter;
 public class Interfaz extends javax.swing.JFrame {
     
     
-    Metodos metodo;
+  
     public int acomulador = 1;
     public int annoNaci;
     public int edad;
@@ -39,8 +36,7 @@ public class Interfaz extends javax.swing.JFrame {
     public String line;
     FileWriter fichero = null;
     PrintWriter pw = null;
-  
-    
+
     String fila;
     String []posiciones;
     /*la he puesto asi o tambien le coloco el getFile pero da igual 
@@ -50,11 +46,9 @@ public class Interfaz extends javax.swing.JFrame {
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
     DefaultTableModel modeloTabla;
-    private TableRowSorter trsfiltro;
-    private String filtro;
     int columna;
     
-      static ArrayList rosterList = new ArrayList();
+     
     /**
      * Creates new form Interfaz
      */
@@ -63,11 +57,12 @@ public class Interfaz extends javax.swing.JFrame {
         llenarCbIdentificacion();
         llenarCbCiudadResidencia();
         llenarCbEPS();
+        cargarTabla();
        
        
     
      
-        metodo=new Metodos();
+        
     }
 
     /**
@@ -200,11 +195,11 @@ public class Interfaz extends javax.swing.JFrame {
 
             },
             new String [] {
-                "#", "Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Sexo", "Ciudad Residencia", ""
+                "#", "Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Sexo", "Ciudad Residencia", "EPS"
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, false
+                false, false, false, false, false, false, false, false, false, true
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -454,7 +449,6 @@ public class Interfaz extends javax.swing.JFrame {
             //se guarda linea por linea en el archivo
             while (st.hasMoreTokens()) {
                 line = st.nextToken();
-               
                 pw.print(cbIdentificacion.getSelectedItem());
                 pw.print(";");
                 pw.print(txtIdentificacion.getText());
@@ -474,7 +468,7 @@ public class Interfaz extends javax.swing.JFrame {
                 pw.print(cbEPS.getSelectedItem());
                 pw.print(";");
                 pw.println();
-                pw.close();
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -513,8 +507,7 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-       public void cargarTabla() {
-
+    public void cargarTabla() {
         modeloTabla = (DefaultTableModel) jTRegistro.getModel();
         BufferedReader br = null;
         try {
@@ -524,8 +517,18 @@ public class Interfaz extends javax.swing.JFrame {
                 for (int column = 0; column < 9; column++) {
                     while (line != null) {
                         String[] rowfields = line.split(";");
-                        
-                        modeloTabla.addRow(rowfields);
+                        String documento = rowfields[0];
+                        String numeroDoc = rowfields[1];
+                        String nombre = rowfields[2];
+                        String apellido = rowfields[3];
+                        String fechaNaci = rowfields[4];
+                        String edad1 = rowfields[5];
+                        String genero = rowfields[6];
+                        String ciudad = rowfields[7];
+                        String ePS = rowfields[8];
+                        Object[] valor = {acomulador++, documento, numeroDoc, nombre, apellido,
+                            fechaNaci, edad1, genero, ciudad, ePS};
+                        modeloTabla.addRow(valor);
                         line = br.readLine();
                     }
 

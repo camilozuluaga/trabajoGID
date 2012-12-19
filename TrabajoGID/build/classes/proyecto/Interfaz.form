@@ -297,7 +297,7 @@
                     <Column editable="false" title="Edad" type="java.lang.Object"/>
                     <Column editable="false" title="Sexo" type="java.lang.Object"/>
                     <Column editable="false" title="Ciudad Residencia" type="java.lang.Object"/>
-                    <Column editable="false" title="" type="java.lang.Object"/>
+                    <Column editable="true" title="EPS" type="java.lang.Object"/>
                   </Table>
                 </Property>
               </Properties>
