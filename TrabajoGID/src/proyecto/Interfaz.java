@@ -6,12 +6,14 @@ package proyecto;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.io.Reader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -19,24 +21,20 @@ import java.util.Scanner;
 import java.util.StringTokenizer;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import javax.swing.table.TableRowSorter;
 
 /**
  *
  * @author jucazuse
  */
-public class Interfaz extends javax.swing.JFrame {
+public final class Interfaz extends javax.swing.JFrame {
     
-    
-  
-    public int acomulador = 1;
+    public int contador=1;
     public int annoNaci;
     public int edad;
     public String sexo;
     public String line;
     FileWriter fichero = null;
     PrintWriter pw = null;
-
     String fila;
     String []posiciones;
     /*la he puesto asi o tambien le coloco el getFile pero da igual 
@@ -46,9 +44,9 @@ public class Interfaz extends javax.swing.JFrame {
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
     DefaultTableModel modeloTabla;
-    int columna;
-    
-     
+    String[] rowfields;
+    BufferedReader br;
+    FileReader fr;
     /**
      * Creates new form Interfaz
      */
@@ -58,11 +56,8 @@ public class Interfaz extends javax.swing.JFrame {
         llenarCbCiudadResidencia();
         llenarCbEPS();
         cargarTabla();
-       
-       
-    
-     
-        
+
+  
     }
 
     /**
@@ -199,7 +194,7 @@ public class Interfaz extends javax.swing.JFrame {
             }
         ) {
             boolean[] canEdit = new boolean [] {
-                false, false, false, false, false, false, false, false, false, true
+                true, false, false, false, false, false, false, false, false, false
             };
 
             public boolean isCellEditable(int rowIndex, int columnIndex) {
@@ -252,6 +247,7 @@ public class Interfaz extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    @SuppressWarnings("empty-statement")
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
         /*esta variable captura el año de nacimiento */
         annoNaci = jDateFecha.getCalendar().get(Calendar.YEAR);
@@ -259,68 +255,57 @@ public class Interfaz extends javax.swing.JFrame {
         /*esta variable nos muestra la edad*/
         edad = (anno - annoNaci);
 
-        /*esta es la fecha del jDateChooser */
+
+        /*Aqui obtenemos la fecha del JDateChooser y le damos 
+         * formato*/
         Date date = jDateFecha.getDate();
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
 
         /*este es una condicion con operadores ternarios para ver el sexo  */
         sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
 
-        /*con este metodo le damos el modelo a la tabla */
         
-         modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-        /* con esto llenamos la tabla  */
+      
+       
+        
+        /*con esto le damos el modelo a la tabla */
+        modeloTabla = (DefaultTableModel) jTRegistro.getModel();
+       
+         /* con esto llenamos la tabla  */
         Object nuevo[] = {
-            acomulador++, cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
+            contador++,cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
             txtApellidos.getText(), dt.format(date), edad, sexo,
             cbCiudadR.getSelectedItem(), cbEPS.getSelectedItem()
         };
 
         /*con esto añadimos los datos a la tabla */
         modeloTabla.addRow(nuevo);
-
+             
         /*metodo para guardar el archivo */
-        SaveFile(";", file);
-
+        guardarArchivo(";", file);
         
         txtIdentificacion.setText("");
         txtNombre.setText("");
         txtApellidos.setText("");
-      
-
 
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-//        Datos dato = new Datos(file);
-//        metodo.addDatos(dato);
-//        try {
-//            JasperReport reporte = (JasperReport) JRLoader.loadObject(url);
-//            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, metodo);
-//            JRExporter exporter = new JRPdfExporter();
-//            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-//            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Registrados.pdf"));
-//            exporter.exportReport();
-//
-//            JasperViewer viewer = new JasperViewer(jasperPrint);
-//            viewer.setTitle("Registrados");
-//            viewer.setVisible(true);
-//        } catch (JRException ex) {
-//            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-//            System.out.println("error generando el reporte ");
-//        }
+
+      
+      
       
        
+
     
        
 
+      
 
-
-         
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
-       leerArchivo();
+      leerArchivo();
     }//GEN-LAST:event_txtIdentificacionKeyReleased
 
     private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
@@ -425,7 +410,7 @@ public class Interfaz extends javax.swing.JFrame {
         cbEPS.addItem("Cosmited");
     }
 
-    private void SaveFile(String t, File file) {
+    private void guardarArchivo(String t, File file) {
         /*esta variable captura el año de nacimiento */
         annoNaci = jDateFecha.getCalendar().get(Calendar.YEAR);
 
@@ -467,8 +452,7 @@ public class Interfaz extends javax.swing.JFrame {
                 pw.print(";");
                 pw.print(cbEPS.getSelectedItem());
                 pw.print(";");
-                pw.println();
-                
+                pw.println();     
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -491,12 +475,11 @@ public class Interfaz extends javax.swing.JFrame {
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
                 for (int i =0; i < posiciones.length; i++) {
-                    if (posiciones[i].equals(txtIdentificacion.getText())) {
+                  if (posiciones[i].contentEquals(txtIdentificacion.getText())) {
                         JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
                                 ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
                         btnGuardar.setEnabled(false);
                         txtIdentificacion.setText("");
-                       
                     }
                    
                 }
@@ -507,37 +490,40 @@ public class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void cargarTabla() {
-        modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-        BufferedReader br = null;
+//   
+    
+     public void cargarTabla() {
         try {
-            br = new BufferedReader(new FileReader("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
-            line = br.readLine();
-            for (int row = 0; row < 1; row++) {
-                for (int column = 0; column < 9; column++) {
-                    while (line != null) {
-                        String[] rowfields = line.split(";");
-                        String documento = rowfields[0];
-                        String numeroDoc = rowfields[1];
-                        String nombre = rowfields[2];
-                        String apellido = rowfields[3];
-                        String fechaNaci = rowfields[4];
-                        String edad1 = rowfields[5];
-                        String genero = rowfields[6];
-                        String ciudad = rowfields[7];
-                        String ePS = rowfields[8];
-                        Object[] valor = {acomulador++, documento, numeroDoc, nombre, apellido,
-                            fechaNaci, edad1, genero, ciudad, ePS};
-                        modeloTabla.addRow(valor);
-                        line = br.readLine();
-                    }
-
-                }
+            modeloTabla = (DefaultTableModel) jTRegistro.getModel();
+            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            while (scan.hasNext()) {
+                fila = scan.nextLine();
+                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                posiciones = fila.split(";");
+                String tipoDoc, docuento, nombre, apellido,
+                        fechaNaci, edad1,genero, ciudadRe, ePS;
+                
+                tipoDoc=posiciones[0];
+                docuento=posiciones[1];
+                nombre=posiciones[2];
+                apellido=posiciones[3];
+                fechaNaci=posiciones[4];
+                edad1=posiciones[5];
+                genero=posiciones[6];
+                ciudadRe=posiciones[7];
+                ePS=posiciones[8];
+                Object[] tabla={contador++,tipoDoc,docuento,nombre,apellido,
+                                fechaNaci,edad1,genero,ciudadRe,ePS};
+                modeloTabla.addRow(tabla);
+                        
+                
+                
+                
+                posiciones = null;
             }
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (FileNotFoundException x) {
+            System.out.println("No se pudo encontrar el archivo");
         }
-
     }
+
 }

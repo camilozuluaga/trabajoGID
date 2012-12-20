@@ -1,0 +1,89 @@
+========================
+BUILD OUTPUT DESCRIPTION
+========================
+
+When you build an Java application project that has a main class, the IDE
+automatically copies all of the JAR
+files on the projects classpath to your projects dist/lib folder. The IDE
+also adds each of the JAR files to the Class-Path element in the application
+JAR files manifest file (MANIFEST.MF).
+
+To run the project from the command line, go to the dist folder and
+type the following:
+
+java -jar "TrabajoGID.jar" 
+
+To distribute this project, zip up the dist folder (including the lib folder)
+and distribute the ZIP file.
+
+Notes:
+
+* If two JAR files on the project classpath have the same name, only the first
+JAR file is copied to the lib folder.
+* Only JAR files are copied to the lib folder.
+If the classpath contains other types of files or folders, these files (folders)
+are not copied.
+* If a library on the projects classpath also has a Class-Path element
+specified in the manifest,the content of the Class-Path element has to be on
+the projects runtime path.
+* To set a main class in a standard Java project, right-click the project node
+in the Projects window and choose Properties. Then click Run and enter the
+class name in the Main Class field. Alternatively, you can manually type the
+class name in the manifest Main-Class element.
+
+ /*Date: La clase Date representa un momento específico en el tiempo, 
+ * con una precisión de milisegundo. La 
+informacion sobre fecha y hora se almacena en un entero long de
+64 bits*/
+
+/*SimpleDateFormat: es una clase concreta para dar formato a fechas y 
+ * analizar de una manera sensible a la localidad. 
+ * Permite formatear (fecha - texto>)*/
+
+ /*DefaulTableModel: Esta es una implementación de TableModel que utiliza 
+ * un vector de 
+  * vectores para almacenar los objetos de valor de celda */
+       
+/*getModel: Devuelve el TableModel que proporciona
+  * los datos mostrados por esta JTable.*/
+
+/*Añade una fila a la final del modelo. La nueva fila contiene valores nulos a menos que se especifique rowData.
+* La notificación de la fila que se agrega se generará.
+¨*Parámetros:
+rowData - Los datos opcionales de la fila que se agrega*/
+
+/*La clase string tokenizer permite que una aplicación para romper una cadena en tokens. 
+*El método tokenización es mucho más simple que el utilizado por la clase StreamTokenizer. 
+*Los métodos StringTokenizer no distinguen entre los identificadores, números y cadenas entre comillas,
+*ni reconocer y omitir comentarios. */
+
+/*PrintWriter: Imprime el formato representaciones de objetos en una secuencia de texto de salida.
+ Esta clase implementa todos los métodos de impresión que se encuentran en PrintStream
+*Parámetros:
+*archivo - El archivo que se utilizará como destino de este escritor. Si el archivo existe, 
+*entonces se truncará al tamaño cero, de lo contrario, un nuevo archivo será creado.
+*La salida se escribe en el archivo y se almacena en búfer.
+*/
+
+/*FileWriter:Construye un objeto FileWriter dado un objeto File. Si el segundo argumento es cierto, 
+*entonces bytes se escriben en el final del archivo en lugar de al principio.
+*parametros:
+*File - Objeto File para escribir anexar.
+*si es verdad, entonces bytes se escribe al final del archivo y no el principio
+*/
+
+/*hasMoreTokens:
+Comprueba si hay más tokens disponibles de este señalizador de cadena. Si este método devuelve true,
+ entonces una llamada posterior a nextToken sin argumentos con éxito devuelve un token.
+Devuelve:
+verdadero si y sólo si existe al menos una ficha en la cadena después de la posición actual; 
+falso en caso contrario.
+*/
+
+/*Devuelve el siguiente token de esta cadena tokenizer.
+Devuelve:
+el siguiente token de esta cadena tokenizer.*/
+
+/*Print: Imprime un objeto. La cadena producida por el String.valueOf (Object) 
+se traduce en bytes de acuerdo con la codificación de la plataforma de caracteres por defecto, 
+y estos bytes se escriben exactamente de la manera de la PrintWriter.write (int).*/
