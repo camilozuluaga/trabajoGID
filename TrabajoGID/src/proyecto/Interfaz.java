@@ -45,8 +45,10 @@ public final class Interfaz extends javax.swing.JFrame {
     int anno = annoSistema.get(Calendar.YEAR);
     DefaultTableModel modeloTabla;
     String[] rowfields;
-    BufferedReader br;
-    FileReader fr;
+    public String tipoDoc, docuento, nombre, apellido,
+            fechaNaci, edad1, genero, ciudadRe, ePS;
+    
+    
     /**
      * Creates new form Interfaz
      */
@@ -264,10 +266,6 @@ public final class Interfaz extends javax.swing.JFrame {
         /*este es una condicion con operadores ternarios para ver el sexo  */
         sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
 
-        
-      
-       
-        
         /*con esto le damos el modelo a la tabla */
         modeloTabla = (DefaultTableModel) jTRegistro.getModel();
        
@@ -313,7 +311,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarMouseReleased
 
     private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
-       
+       compararDocumento();
     }//GEN-LAST:event_txtBuscarKeyPressed
 
     /**
@@ -500,9 +498,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 fila = scan.nextLine();
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
-                String tipoDoc, docuento, nombre, apellido,
-                        fechaNaci, edad1,genero, ciudadRe, ePS;
-                
+  
                 tipoDoc=posiciones[0];
                 docuento=posiciones[1];
                 nombre=posiciones[2];
@@ -515,15 +511,38 @@ public final class Interfaz extends javax.swing.JFrame {
                 Object[] tabla={contador++,tipoDoc,docuento,nombre,apellido,
                                 fechaNaci,edad1,genero,ciudadRe,ePS};
                 modeloTabla.addRow(tabla);
-                        
-                
-                
-                
                 posiciones = null;
             }
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
     }
-
+     
+     
+    public void compararDocumento() {
+        try {
+            modeloTabla = (DefaultTableModel) jTRegistro.getModel();
+            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            while (scan.hasNext()) {
+                fila = scan.nextLine();
+                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                posiciones = fila.split(";");
+                docuento = posiciones[1];
+                nombre = posiciones[2];
+                apellido = posiciones[3];
+                if (txtBuscar.getText().equals(docuento)) {
+                    JOptionPane.showMessageDialog(this, "El Usuario esta Registrado con el Nombre:  ".concat(nombre).concat(" ")
+                            .concat(apellido), "Informacion", JOptionPane.INFORMATION_MESSAGE);
+                    txtBuscar.setText("");
+                }
+                
+                posiciones = null;
+                
+            }
+            
+        } catch (FileNotFoundException x) {
+            System.out.println("No se pudo encontrar el archivo");
+        }
+        
+    }
 }
