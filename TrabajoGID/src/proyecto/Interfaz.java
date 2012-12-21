@@ -4,23 +4,32 @@
  */
 package proyecto;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.Reader;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.util.JRLoader;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -45,7 +54,7 @@ public final class Interfaz extends javax.swing.JFrame {
     int anno = annoSistema.get(Calendar.YEAR);
     DefaultTableModel modeloTabla;
     String[] rowfields;
-    public String tipoDoc, docuento, nombre, apellido,
+    public String tipoDoc, documento, nombre, apellido,
             fechaNaci, edad1, genero, ciudadRe, ePS;
     
     
@@ -289,16 +298,8 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-
-      
-      
-      
-       
-
     
-       
-
-      
+        generarReporte();
 
     }//GEN-LAST:event_btnInformeActionPerformed
 
@@ -409,19 +410,10 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     private void guardarArchivo(String t, File file) {
-        /*esta variable captura el año de nacimiento */
-        annoNaci = jDateFecha.getCalendar().get(Calendar.YEAR);
-
-        /*esta variable nos muestra la edad*/
-        edad = (anno - annoNaci);
-
+        
         /*esta es la fecha del jDateChooser */
         Date date = jDateFecha.getDate();
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
-
-        /*este es una condicion con operadores ternarios para ver el sexo  */
-        sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
-
 
         //se separa el texto cada salto de linea
         StringTokenizer st = new StringTokenizer(t, "/n");
@@ -450,7 +442,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 pw.print(";");
                 pw.print(cbEPS.getSelectedItem());
                 pw.print(";");
-                pw.println();     
+                pw.println();
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -472,14 +464,14 @@ public final class Interfaz extends javax.swing.JFrame {
                 fila = scan.nextLine();
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
-                for (int i =0; i < posiciones.length; i++) {
-                  if (posiciones[i].contentEquals(txtIdentificacion.getText())) {
+                for (int i = 0; i < posiciones.length; i++) {
+                    if (posiciones[i].contentEquals(txtIdentificacion.getText())) {
                         JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
                                 ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
                         btnGuardar.setEnabled(false);
                         txtIdentificacion.setText("");
                     }
-                   
+
                 }
                 posiciones = null;
             }
@@ -488,7 +480,7 @@ public final class Interfaz extends javax.swing.JFrame {
         }
     }
 
-//   
+
     
      public void cargarTabla() {
         try {
@@ -498,9 +490,8 @@ public final class Interfaz extends javax.swing.JFrame {
                 fila = scan.nextLine();
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
-  
                 tipoDoc=posiciones[0];
-                docuento=posiciones[1];
+                documento=posiciones[1];
                 nombre=posiciones[2];
                 apellido=posiciones[3];
                 fechaNaci=posiciones[4];
@@ -508,7 +499,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 genero=posiciones[6];
                 ciudadRe=posiciones[7];
                 ePS=posiciones[8];
-                Object[] tabla={contador++,tipoDoc,docuento,nombre,apellido,
+                Object[] tabla={contador++,tipoDoc,documento,nombre,apellido,
                                 fechaNaci,edad1,genero,ciudadRe,ePS};
                 modeloTabla.addRow(tabla);
                 posiciones = null;
@@ -521,28 +512,62 @@ public final class Interfaz extends javax.swing.JFrame {
      
     public void compararDocumento() {
         try {
-            modeloTabla = (DefaultTableModel) jTRegistro.getModel();
             Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
             while (scan.hasNext()) {
                 fila = scan.nextLine();
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
-                docuento = posiciones[1];
+                documento = posiciones[1];
                 nombre = posiciones[2];
                 apellido = posiciones[3];
-                if (txtBuscar.getText().equals(docuento)) {
-                    JOptionPane.showMessageDialog(this, "El Usuario esta Registrado con el Nombre:  ".concat(nombre).concat(" ")
+                if (txtBuscar.getText().equals(documento)) {
+                    JOptionPane.showMessageDialog(this, "El Usuario esta Registrado con el Nombre de:  ".concat(nombre).concat(" ")
                             .concat(apellido), "Informacion", JOptionPane.INFORMATION_MESSAGE);
                     txtBuscar.setText("");
+
                 }
-                
                 posiciones = null;
-                
             }
-            
+
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
-        
+
+    }
+
+    public void generarReporte() {
+        try {
+            try {
+                
+                Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+                while (scan.hasNext()) {
+                    fila = scan.nextLine();
+                    fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                    posiciones = fila.split(";");
+                    Metodos metodo = new Metodos();
+                    Datos datos = new Datos(posiciones[0], posiciones[1], posiciones[2], posiciones[3], posiciones[4], posiciones[5], posiciones[6], posiciones[7], posiciones[8]);
+
+                    metodo.addDatos(datos);
+                    URL url = this.getClass().getResource("/archivo/registrados.jasper");
+                    JasperReport reporte = (JasperReport) JRLoader.loadObject(url);
+                    JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, metodo);
+                    JRExporter exporter = new JRPdfExporter();
+                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+                    exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Registrados.pdf"));
+                    exporter.exportReport();
+                    JasperViewer viewer = new JasperViewer(jasperPrint);
+                    viewer.setTitle("Registrados");
+                    viewer.setVisible(true);
+                    posiciones = null;
+                }
+
+            } catch (FileNotFoundException x) {
+                System.out.println("No se pudo encontrar el archivo");
+            }
+
+        } catch (JRException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+
+        }
     }
 }

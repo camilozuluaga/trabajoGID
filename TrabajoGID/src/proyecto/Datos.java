@@ -12,14 +12,14 @@ import java.io.File;
  */
 public class Datos {
     
-    private String numero;
+    
     private String tipoDocumento;
     private String numDocumento;
     private String nombre;
     private String apellido;
     private String fechaNaci;
-    private String edad;
-    private String sexo;
+    private String Edad;
+    private String Sexo;
     private String ciudadResi;
     private String EPS;
 
@@ -27,26 +27,20 @@ public class Datos {
     
     }
 
-    public Datos(String numero, String tipoDocumento, String numDocumento, String nombre, String apellido, String fechaNaci, String edad, String sexo, String ciudadResi, String EPS) {
-        this.numero = numero;
+    public Datos(String tipoDocumento, String numDocumento, String nombre, String apellido, String fechaNaci, String edad, String sexo, String ciudadResi, String EPS) {
+        
         this.tipoDocumento = tipoDocumento;
         this.numDocumento = numDocumento;
         this.nombre = nombre;
         this.apellido = apellido;
         this.fechaNaci = fechaNaci;
-        this.edad = edad;
-        this.sexo = sexo;
+        this.Edad = edad;
+        this.Sexo = sexo;
         this.ciudadResi = ciudadResi;
         this.EPS = EPS;
     }
 
-    public String getNumero() {
-        return numero;
-    }
-
-    public void setNumero(String numero) {
-        this.numero = numero;
-    }
+   
 
     public String getTipoDocumento() {
         return tipoDocumento;
@@ -89,19 +83,19 @@ public class Datos {
     }
 
     public String getEdad() {
-        return edad;
+        return Edad;
     }
 
     public void setEdad(String edad) {
-        this.edad = edad;
+        this.Edad = edad;
     }
 
     public String getSexo() {
-        return sexo;
+        return Sexo;
     }
 
     public void setSexo(String sexo) {
-        this.sexo = sexo;
+        this.Sexo = sexo;
     }
 
     public String getCiudadResi() {

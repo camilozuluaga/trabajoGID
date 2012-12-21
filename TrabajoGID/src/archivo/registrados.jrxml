@@ -1,29 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="registrados" language="groovy" pageWidth="842" pageHeight="595" orientation="Landscape" columnWidth="802" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9fe6e54-42e5-4958-a785-572801a79fb3">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="registrados" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="08fff376-753c-4cb8-b180-94da9051890d">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<field name="Numero" class="java.lang.String"/>
-	<field name="TipoDocumento" class="java.lang.String"/>
+	<field name="Tipo Identificacion" class="java.lang.String"/>
 	<field name="Documento" class="java.lang.String"/>
 	<field name="Nombre" class="java.lang.String"/>
 	<field name="Apellido" class="java.lang.String"/>
-	<field name="FechaNacimiento" class="java.lang.String"/>
+	<field name="Fecha Nacimiento" class="java.lang.String"/>
 	<field name="Edad" class="java.lang.String"/>
 	<field name="Sexo" class="java.lang.String"/>
-	<field name="CiudadResi" class="java.lang.String"/>
+	<field name="Ciudad Residencia" class="java.lang.String"/>
 	<field name="EPS" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="78" splitType="Stretch">
+		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="f53a554c-d3d9-44c5-b2de-d10b32477ce7" x="312" y="18" width="179" height="42"/>
+				<reportElement uuid="a19cc89f-590b-4519-98ff-c63a8eff732d" x="258" y="22" width="237" height="34"/>
 				<textElement>
-					<font size="26" isBold="true"/>
+					<font size="16" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Registrados]]></text>
+				<text><![CDATA[USUARIOS REGISTRADOS ]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -31,110 +30,100 @@
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="36" splitType="Stretch">
+		<band height="51" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="130fc504-a9e1-410b-9a68-7b7ba00316a7" x="53" y="0" width="85" height="20"/>
+				<reportElement uuid="9e626297-f243-4c64-86db-2fbd8f4ae93c" x="0" y="2" width="100" height="20"/>
 				<textElement/>
-				<text><![CDATA[Tipo Documento]]></text>
+				<text><![CDATA[Tipo Identificacion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="40288c7f-00e4-40e6-96b4-83f767e8327d" x="247" y="0" width="65" height="20"/>
-				<textElement/>
-				<text><![CDATA[Nombre]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="bd50f207-8385-4a5b-8ed7-ab32b95417df" x="326" y="0" width="65" height="20"/>
-				<textElement/>
-				<text><![CDATA[Apellido]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="ed750cb7-e1bb-403c-8b62-15629df32f5a" x="514" y="0" width="66" height="20"/>
-				<textElement/>
-				<text><![CDATA[Edad]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="adf422ff-e4af-4899-8b1d-c2ca120f3d33" x="594" y="0" width="50" height="20"/>
-				<textElement/>
-				<text><![CDATA[Sexo]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="2927228c-f919-4082-bc87-554f05764bd2" x="748" y="0" width="54" height="20"/>
-				<textElement/>
-				<text><![CDATA[EPS]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="173bcf8b-8936-4963-af15-16c9c664f579" x="0" y="0" width="39" height="20"/>
-				<textElement/>
-				<text><![CDATA[Numero]]></text>
-			</staticText>
-			<staticText>
-				<reportElement uuid="f8a1719e-349c-4f0f-90f8-ea8f8cca8ddd" x="147" y="0" width="73" height="20"/>
+				<reportElement uuid="5a8e43a7-f383-44c9-8535-70eba153a556" x="111" y="2" width="64" height="20"/>
 				<textElement/>
 				<text><![CDATA[Documento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="ba27c87a-3290-473b-8213-c5df50a94dc6" x="404" y="0" width="100" height="20"/>
+				<reportElement uuid="7e2054a1-088e-4dfb-9ce8-976eed19b030" x="191" y="2" width="64" height="20"/>
 				<textElement/>
-				<text><![CDATA[FechaNacimiento]]></text>
+				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="10b9ee25-652d-4995-9526-c27f59862fe9" x="658" y="0" width="68" height="20"/>
+				<reportElement uuid="a79fec8b-95d6-41d2-9732-a14ea407bf1e" x="278" y="2" width="60" height="20"/>
 				<textElement/>
-				<text><![CDATA[CiudadResi]]></text>
+				<text><![CDATA[Apellido]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="8e545c25-9300-4a72-a808-9150b6e620bd" x="355" y="0" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Fecha Nacimiento]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="b4ca7453-065f-4892-aca8-da392af6b155" x="470" y="2" width="53" height="20"/>
+				<textElement/>
+				<text><![CDATA[Edad]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="225a86c7-8278-4a61-8321-f596a57d9b7e" x="537" y="2" width="61" height="20"/>
+				<textElement/>
+				<text><![CDATA[Sexo]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="a4700a8c-1636-4e02-a47c-e524ca0bd9a9" x="609" y="2" width="100" height="20"/>
+				<textElement/>
+				<text><![CDATA[Ciudad Residencia]]></text>
+			</staticText>
+			<staticText>
+				<reportElement uuid="91f72af9-09ac-40aa-968d-353bae91635d" x="721" y="2" width="31" height="20"/>
+				<textElement/>
+				<text><![CDATA[EPS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="34" splitType="Stretch">
 			<textField>
-				<reportElement uuid="3deb51ec-fc1c-4585-9f94-4c5649c40b45" x="247" y="0" width="65" height="20"/>
+				<reportElement uuid="64b305e9-f25e-4ea2-b5bd-ad2f73db5272" x="0" y="0" width="59" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Tipo Identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="ba1619d1-b108-45eb-ac4b-01f632b2cdbe" x="326" y="0" width="65" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Apellido}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="14bf6c86-6b50-4dae-8d0b-1a943498a76c" x="514" y="0" width="56" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Edad}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="8ba64c68-d8a7-49c7-ae29-412f08aa6772" x="594" y="0" width="50" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Sexo}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="c4f61f9b-02e6-4398-8be9-3323f8165644" x="748" y="0" width="54" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{EPS}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="0f5d4e6b-99d7-43bd-babc-409781625560" x="0" y="0" width="39" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Numero}]]></textFieldExpression>
-			</textField>
-			<textField>
-				<reportElement uuid="bf607e2a-3ff6-4600-bcca-4a1194079879" x="147" y="0" width="73" height="20"/>
+				<reportElement uuid="0296bcb7-0762-4d66-829b-8662821643ee" x="100" y="0" width="64" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{Documento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="d29ddee0-2b02-4f08-a04e-fb06b030db86" x="47" y="0" width="91" height="20"/>
+				<reportElement uuid="8d766998-8022-41e9-9394-a88967e63614" x="191" y="0" width="64" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{TipoDocumento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="c204a50d-c1ed-4452-8aff-dc7c943812b2" x="404" y="0" width="87" height="20"/>
+				<reportElement uuid="eda1b1db-3805-46f6-afcc-d5b45abe7760" x="278" y="0" width="60" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{FechaNacimiento}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Apellido}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="a4b99286-f90b-483f-b8cd-61fef3db55bd" x="658" y="0" width="68" height="20"/>
+				<reportElement uuid="804c2e14-2881-4061-9c3c-af44bd072b83" x="355" y="0" width="64" height="20"/>
 				<textElement/>
-				<textFieldExpression><![CDATA[$F{CiudadResi}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{Fecha Nacimiento}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="de75ba54-543c-4c90-b674-50376302da61" x="470" y="0" width="53" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Edad}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="85e28c0f-5268-4aed-93b5-4bb2b50f21bf" x="537" y="0" width="61" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Sexo}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="af692e8e-1d26-4d10-a5fe-f04efcc1f319" x="609" y="0" width="57" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{Ciudad Residencia}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement uuid="8a05198c-8a16-41be-a3ea-e5676d987fc6" x="677" y="0" width="75" height="20"/>
+				<textElement/>
+				<textFieldExpression><![CDATA[$F{EPS}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

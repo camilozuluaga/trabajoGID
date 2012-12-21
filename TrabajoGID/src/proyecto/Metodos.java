@@ -16,43 +16,41 @@ import net.sf.jasperreports.engine.JRField;
  */
 public class Metodos implements JRDataSource {
 
-    private List<Datos> atributos = new ArrayList<>();
+    private List<Datos> datos = new ArrayList<>();
     private int datosActuales = -1;
 
     @Override
     public boolean next() throws JRException {
-        return ++datosActuales < atributos.size();
+        return ++datosActuales < datos.size();
     }
 
     @Override
     public Object getFieldValue(JRField jrf) throws JRException {
         Object valor = null;
 
-        if ("Numero".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getNumero();
-        } else if ("TipoDocumento".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getTipoDocumento();
+        if ("Tipo Identificacion".equals(jrf.getName())) {
+            valor = datos.get(datosActuales).getTipoDocumento();
         } else if ("Documento".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getNumDocumento();
+            valor = datos.get(datosActuales).getNumDocumento();
         } else if ("Nombre".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getNombre();
+            valor = datos.get(datosActuales).getNombre();
         } else if ("Apellido".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getApellido();
-        } else if ("FechaNacimiento".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getFechaNaci();
+            valor = datos.get(datosActuales).getApellido();
+        } else if ("Fecha Nacimiento".equals(jrf.getName())) {
+            valor = datos.get(datosActuales).getFechaNaci();
         } else if ("Edad".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getEdad();
+            valor = datos.get(datosActuales).getEdad();
         } else if ("Sexo".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getSexo();
-        } else if ("CiudadResi".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getCiudadResi();
+            valor = datos.get(datosActuales).getSexo();
+        } else if ("Ciudad Residencia".equals(jrf.getName())) {
+            valor = datos.get(datosActuales).getCiudadResi();
         } else if ("EPS".equals(jrf.getName())) {
-            valor = atributos.get(datosActuales).getEPS();
+            valor = datos.get(datosActuales).getEPS();
         }
         return valor;
     }
 
-    public void addDatos(Datos atributos) {
-        this.atributos.add(atributos);
+    public void addDatos(Datos datos) {
+        this.datos.add(datos);
     }
 }
