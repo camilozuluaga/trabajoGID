@@ -13,8 +13,6 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -37,7 +35,9 @@ import net.sf.jasperreports.view.JasperViewer;
  */
 public final class Interfaz extends javax.swing.JFrame {
     
-    public int contador=1;
+    public String cc;//variable de la cedula
+    public int tam;//tamaño del string
+    public int contador = 1;
     public int annoNaci;
     public int edad;
     public String sexo;
@@ -45,7 +45,7 @@ public final class Interfaz extends javax.swing.JFrame {
     FileWriter fichero = null;
     PrintWriter pw = null;
     String fila;
-    String []posiciones;
+    String[] posiciones;
     /*la he puesto asi o tambien le coloco el getFile pero da igual 
      * no me sale error pero no deja cargar el archivo */
     File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"); 
@@ -148,6 +148,12 @@ public final class Interfaz extends javax.swing.JFrame {
         jLabel4.setText("Ciudad Residencia");
         jLabel4.setBounds(20, 170, 100, 20);
         jLayeredPane1.add(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtNombreKeyReleased(evt);
+            }
+        });
         txtNombre.setBounds(170, 60, 180, 30);
         jLayeredPane1.add(txtNombre, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -174,6 +180,12 @@ public final class Interfaz extends javax.swing.JFrame {
         });
         txtIdentificacion.setBounds(510, 20, 190, 30);
         jLayeredPane1.add(txtIdentificacion, javax.swing.JLayeredPane.DEFAULT_LAYER);
+
+        txtApellidos.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtApellidosKeyReleased(evt);
+            }
+        });
         txtApellidos.setBounds(510, 60, 190, 30);
         jLayeredPane1.add(txtApellidos, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
@@ -230,8 +242,11 @@ public final class Interfaz extends javax.swing.JFrame {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtBuscarKeyPressed(evt);
             }
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtBuscarKeyReleased(evt);
+            }
         });
-        txtBuscar.setBounds(170, 30, 190, 30);
+        txtBuscar.setBounds(190, 30, 190, 30);
         jLayeredPane2.add(txtBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -304,7 +319,18 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
-      leerArchivo();
+      compararDocumento();
+      
+        if (!txtIdentificacion.getText().matches("[ 0 - 9 ]*")) {
+            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            txtIdentificacion.setText("");
+        }
+        cc = txtIdentificacion.getText();
+        tam = cc.length();
+        if (tam > 12) {
+            JOptionPane.showMessageDialog(this, "EL NUMERO DE CEDULA NO ES VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            txtIdentificacion.setText("");
+        }
     }//GEN-LAST:event_txtIdentificacionKeyReleased
 
     private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
@@ -312,8 +338,37 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarMouseReleased
 
     private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
-       compararDocumento();
+       buscarRegistrados();
     }//GEN-LAST:event_txtBuscarKeyPressed
+
+    private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
+        if (!txtNombre.getText().matches("[ /s a-zA-z]*")) {
+            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            txtNombre.setText("");
+        }
+    }//GEN-LAST:event_txtNombreKeyReleased
+
+    private void txtApellidosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyReleased
+         if (!txtApellidos.getText().matches("[ /s a-zA-z]*")) {
+            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            txtApellidos.setText("");
+        }
+    }//GEN-LAST:event_txtApellidosKeyReleased
+
+    private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
+        if (!txtBuscar.getText().matches("[0-9]*")) {
+            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            txtBuscar.setText("");
+        }
+        /*variable de la cedula*/
+        cc = txtBuscar.getText();
+        /*tamaño del String*/
+        tam = cc.length();
+        if (tam > 12) {
+            JOptionPane.showMessageDialog(this, "EL NUMERO DE CEDULA NO ES VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            txtBuscar.setText("");
+        }
+    }//GEN-LAST:event_txtBuscarKeyReleased
 
     /**
      * @param args the command line arguments
@@ -387,17 +442,46 @@ public final class Interfaz extends javax.swing.JFrame {
     private void llenarCbCiudadResidencia() {
         cbCiudadR.addItem("Alcala");
         cbCiudadR.addItem("Andalucia");
+        cbCiudadR.addItem("Ansermanuevo");
+        cbCiudadR.addItem("Argelia");
+        cbCiudadR.addItem("Bolivar");
         cbCiudadR.addItem("Buenaventura");
         cbCiudadR.addItem("Buga");
+        cbCiudadR.addItem("Bugalagrande");
         cbCiudadR.addItem("Caicedonia");
         cbCiudadR.addItem("Cali");
+        cbCiudadR.addItem("Calima Darien");
+        cbCiudadR.addItem("Candelaria");
         cbCiudadR.addItem("Cartago");
+        cbCiudadR.addItem("Dagua");
+        cbCiudadR.addItem("El Aguila");
+        cbCiudadR.addItem("El Cairo");
+        cbCiudadR.addItem("El Cerrito");
+        cbCiudadR.addItem("El Dovio");
+        cbCiudadR.addItem("Florida");
+        cbCiudadR.addItem("Ginebra");
         cbCiudadR.addItem("Guacari");
         cbCiudadR.addItem("Jamundi");
+        cbCiudadR.addItem("La Cumbre");
+        cbCiudadR.addItem("La Union");
+        cbCiudadR.addItem("La Victoria");
+        cbCiudadR.addItem("Obando");
         cbCiudadR.addItem("Palmira");
+        cbCiudadR.addItem("Pradera");
+        cbCiudadR.addItem("Restrepo");
+        cbCiudadR.addItem("Riofrío");
+        cbCiudadR.addItem("Roldanillo");
+        cbCiudadR.addItem("San Pedro");
         cbCiudadR.addItem("Sevilla");
+        cbCiudadR.addItem("Toro");
+        cbCiudadR.addItem("Trujillo");
         cbCiudadR.addItem("Tulua");
+        cbCiudadR.addItem("Ulloa");
+        cbCiudadR.addItem("Versalles");
+        cbCiudadR.addItem("Vijes");
+        cbCiudadR.addItem("Yotoco");
         cbCiudadR.addItem("Yumbo");
+        cbCiudadR.addItem("Zarzal");
     }
 
     private void llenarCbEPS() {
@@ -457,7 +541,7 @@ public final class Interfaz extends javax.swing.JFrame {
         }
     }
 
-    public void leerArchivo() {
+    public void compararDocumento() {
         try {
             Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
             while (scan.hasNext()) {
@@ -510,7 +594,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }
      
      
-    public void compararDocumento() {
+    public void buscarRegistrados() {
         try {
             Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
             while (scan.hasNext()) {
