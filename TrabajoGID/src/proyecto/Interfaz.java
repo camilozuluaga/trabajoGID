@@ -8,6 +8,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
+import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -34,21 +35,30 @@ import net.sf.jasperreports.view.JasperViewer;
  * @author jucazuse
  */
 public final class Interfaz extends javax.swing.JFrame {
-    
-    public String cc;//variable de la cedula
-    public int tam;//tamaño del string
+
+    /* variable que sirve para guardar lo obtenido en la caja de texto 
+     * Identificacion*/
+    public String nDocumento;
+    /*tamaño del string Identificacion*/
+    public int tam;
+    /*indice de la tabla */
     public int contador = 1;
+    /*variable para capturar el año de nacimiento del Usuario*/
     public int annoNaci;
+    /*variable donde se guarda el calculo de la edad del Usuario. 
+     *parametro: año nacimiento usuario y año del sistema.
+     * resultados: se restan y ahi da la edad del usuario.
+     */
     public int edad;
+    /*Variable donde se guarda el genero del usuari@*/
     public String sexo;
+    /*variable a la que se le pasa si hay mas token en la cadena determinada*/
     public String line;
     FileWriter fichero = null;
     PrintWriter pw = null;
     String fila;
     String[] posiciones;
-    /*la he puesto asi o tambien le coloco el getFile pero da igual 
-     * no me sale error pero no deja cargar el archivo */
-    File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"); 
+    File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt");
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
@@ -56,8 +66,7 @@ public final class Interfaz extends javax.swing.JFrame {
     String[] rowfields;
     public String tipoDoc, documento, nombre, apellido,
             fechaNaci, edad1, genero, ciudadRe, ePS;
-    
-    
+
     /**
      * Creates new form Interfaz
      */
@@ -68,7 +77,7 @@ public final class Interfaz extends javax.swing.JFrame {
         llenarCbEPS();
         cargarTabla();
 
-  
+
     }
 
     /**
@@ -292,20 +301,20 @@ public final class Interfaz extends javax.swing.JFrame {
 
         /*con esto le damos el modelo a la tabla */
         modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-       
-         /* con esto llenamos la tabla  */
+
+        /*con esto llenamos la tabla  */
         Object nuevo[] = {
-            contador++,cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
+            contador++, cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
             txtApellidos.getText(), dt.format(date), edad, sexo,
             cbCiudadR.getSelectedItem(), cbEPS.getSelectedItem()
         };
 
         /*con esto añadimos los datos a la tabla */
         modeloTabla.addRow(nuevo);
-             
+
         /*metodo para guardar el archivo */
         guardarArchivo(";", file);
-        
+
         txtIdentificacion.setText("");
         txtNombre.setText("");
         txtApellidos.setText("");
@@ -313,32 +322,33 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-    
+
         generarReporte();
 
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
-      compararDocumento();
-      
-        if (!txtIdentificacion.getText().matches("[ 0 - 9 ]*")) {
+        compararDocumento();
+
+        if (!txtIdentificacion.getText().matches("[ 0-9 ]*")) {
             JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtIdentificacion.setText("");
         }
-        cc = txtIdentificacion.getText();
-        tam = cc.length();
+        nDocumento = txtIdentificacion.getText();
+        tam = nDocumento.length();
         if (tam > 12) {
             JOptionPane.showMessageDialog(this, "EL NUMERO DE CEDULA NO ES VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtIdentificacion.setText("");
         }
+
     }//GEN-LAST:event_txtIdentificacionKeyReleased
 
     private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
-       btnGuardar.setEnabled(true);
+        btnGuardar.setEnabled(true);
     }//GEN-LAST:event_btnGuardarMouseReleased
 
     private void txtBuscarKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyPressed
-       buscarRegistrados();
+        buscarRegistrados();
     }//GEN-LAST:event_txtBuscarKeyPressed
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
@@ -349,21 +359,21 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void txtApellidosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyReleased
-         if (!txtApellidos.getText().matches("[ /s a-zA-z]*")) {
+        if (!txtApellidos.getText().matches("[ /s a-zA-z]*")) {
             JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtApellidos.setText("");
         }
     }//GEN-LAST:event_txtApellidosKeyReleased
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
-        if (!txtBuscar.getText().matches("[0-9]*")) {
+        if (!txtBuscar.getText().matches("[ 0-9 ]*")) {
             JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtBuscar.setText("");
         }
         /*variable de la cedula*/
-        cc = txtBuscar.getText();
+        nDocumento = txtBuscar.getText();
         /*tamaño del String*/
-        tam = cc.length();
+        tam = nDocumento.length();
         if (tam > 12) {
             JOptionPane.showMessageDialog(this, "EL NUMERO DE CEDULA NO ES VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtBuscar.setText("");
@@ -494,12 +504,12 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     private void guardarArchivo(String t, File file) {
-        
-        /*esta es la fecha del jDateChooser */
+
+        /*esta es la fecha del jDateChooser*/
         Date date = jDateFecha.getDate();
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
 
-        //se separa el texto cada salto de linea
+        /*se separa el texto cada salto de linea*/
         StringTokenizer st = new StringTokenizer(t, "/n");
 
         try {
@@ -541,62 +551,84 @@ public final class Interfaz extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Este metodo lo que hace es leer el archivo y comparar si el numero de
+     * Documento Inscrito en el jTextField es igual al que hay en el archivo
+     * plano. si son iguales mandara un mensaje de informacion al usuario
+     */
     public void compararDocumento() {
         try {
-            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
-            while (scan.hasNext()) {
-                fila = scan.nextLine();
-                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
-                posiciones = fila.split(";");
-                for (int i = 0; i < posiciones.length; i++) {
-                    if (posiciones[i].contentEquals(txtIdentificacion.getText())) {
-                        JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
-                                ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
-                        btnGuardar.setEnabled(false);
-                        txtIdentificacion.setText("");
-                    }
+            Scanner scan;
+            try {
+                scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
+                while (scan.hasNext()) {
+                    fila = scan.nextLine();
+                    fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                    posiciones = fila.split(";");
+                    for (int i = 0; i < posiciones.length; i++) {
+                        if (posiciones[i].equals(txtIdentificacion.getText())) {
+                            JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
+                                    ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
+                            btnGuardar.setEnabled(false);
+                            txtIdentificacion.setText("");
+                        }
 
+                    }
+                    posiciones = null;
                 }
-                posiciones = null;
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             }
+
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
     }
 
-
-    
-     public void cargarTabla() {
+    /**
+     * Este metodo lee el documento y lo separa en un String de vectores (Array)
+     * y se obtiene la posiciones en que estan guardados los datos en el archivo
+     * plano para despues pasarselos a un array de Objetos que seran pasados al
+     * modelo de la tabla para que esta los acomode en u respectiva columna
+     */
+    public void cargarTabla() {
         try {
             modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
             while (scan.hasNext()) {
                 fila = scan.nextLine();
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
-                tipoDoc=posiciones[0];
-                documento=posiciones[1];
-                nombre=posiciones[2];
-                apellido=posiciones[3];
-                fechaNaci=posiciones[4];
-                edad1=posiciones[5];
-                genero=posiciones[6];
-                ciudadRe=posiciones[7];
-                ePS=posiciones[8];
-                Object[] tabla={contador++,tipoDoc,documento,nombre,apellido,
-                                fechaNaci,edad1,genero,ciudadRe,ePS};
+                tipoDoc = posiciones[0];
+                documento = posiciones[1];
+                nombre = posiciones[2];
+                apellido = posiciones[3];
+                fechaNaci = posiciones[4];
+                edad1 = posiciones[5];
+                genero = posiciones[6];
+                ciudadRe = posiciones[7];
+                ePS = posiciones[8];
+                Object[] tabla = {contador++, tipoDoc, documento, nombre, apellido,
+                    fechaNaci, edad1, genero, ciudadRe, ePS};
                 modeloTabla.addRow(tabla);
                 posiciones = null;
             }
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
     }
-     
-     
+
+    /**
+     * Este metodo lo que hace es leer el archivo y obtener la posicion en donde
+     * se encuentra el numero de documento (en este caso es el que se va a
+     * comparar) y los compara si son iguales lanza un mensaje diciendole al
+     * usuario que el "usuario" ya se encuentra registrado
+     */
     public void buscarRegistrados() {
         try {
-            Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+            Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
             while (scan.hasNext()) {
                 fila = scan.nextLine();
                 fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
@@ -608,22 +640,28 @@ public final class Interfaz extends javax.swing.JFrame {
                     JOptionPane.showMessageDialog(this, "El Usuario esta Registrado con el Nombre de:  ".concat(nombre).concat(" ")
                             .concat(apellido), "Informacion", JOptionPane.INFORMATION_MESSAGE);
                     txtBuscar.setText("");
-
                 }
                 posiciones = null;
+
             }
 
+        } catch (URISyntaxException ex) {
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
 
     }
 
+    /**
+     * En este metodo se lee el archivo y se obtiene las posiciones que despues
+     * seran impresas en un documento PDF
+     */
     public void generarReporte() {
         try {
             try {
-                
-                Scanner scan = new Scanner(new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt"));
+
+                Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
                 while (scan.hasNext()) {
                     fila = scan.nextLine();
                     fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
@@ -645,6 +683,8 @@ public final class Interfaz extends javax.swing.JFrame {
                     posiciones = null;
                 }
 
+            } catch (URISyntaxException ex) {
+                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
             } catch (FileNotFoundException x) {
                 System.out.println("No se pudo encontrar el archivo");
             }

@@ -11,7 +11,8 @@ import java.io.File;
  * @author jucazuse
  */
 public class Datos {
-    
+    /**
+     */
     
     private String tipoDocumento;
     private String numDocumento;
