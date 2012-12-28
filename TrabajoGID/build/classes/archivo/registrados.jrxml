@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="registrados" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="08fff376-753c-4cb8-b180-94da9051890d">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="registrados" language="groovy" pageWidth="792" pageHeight="612" orientation="Landscape" columnWidth="752" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3bcc2a67-0e5c-47f7-8336-f010bd0e98bf">
 	<property name="ireport.zoom" value="1.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
 	<field name="Tipo Identificacion" class="java.lang.String"/>
-	<field name="Documento" class="java.lang.String"/>
+	<field name="Identificacion" class="java.lang.String"/>
 	<field name="Nombre" class="java.lang.String"/>
 	<field name="Apellido" class="java.lang.String"/>
 	<field name="Fecha Nacimiento" class="java.lang.String"/>
 	<field name="Edad" class="java.lang.String"/>
-	<field name="Sexo" class="java.lang.String"/>
+	<field name="Genero" class="java.lang.String"/>
 	<field name="Ciudad Residencia" class="java.lang.String"/>
 	<field name="EPS" class="java.lang.String"/>
 	<background>
@@ -18,11 +21,11 @@
 	<title>
 		<band height="79" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="a19cc89f-590b-4519-98ff-c63a8eff732d" x="258" y="22" width="237" height="34"/>
+				<reportElement uuid="aa2ffc7f-5313-45ac-8830-628e7ad054f9" x="316" y="23" width="121" height="32"/>
 				<textElement>
-					<font size="16" isBold="true"/>
+					<font size="20"/>
 				</textElement>
-				<text><![CDATA[USUARIOS REGISTRADOS ]]></text>
+				<text><![CDATA[Registrados ]]></text>
 			</staticText>
 		</band>
 	</title>
@@ -30,99 +33,133 @@
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="51" splitType="Stretch">
+		<band height="53" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="9e626297-f243-4c64-86db-2fbd8f4ae93c" x="0" y="2" width="100" height="20"/>
-				<textElement/>
+				<reportElement uuid="9163e8d8-3925-4fcf-a803-e0c0df02d17c" x="0" y="0" width="72" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[Tipo Identificacion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5a8e43a7-f383-44c9-8535-70eba153a556" x="111" y="2" width="64" height="20"/>
-				<textElement/>
-				<text><![CDATA[Documento]]></text>
+				<reportElement uuid="89b3c822-6665-4259-b22a-201e1a6a754c" x="89" y="2" width="77" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Identificacion]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="7e2054a1-088e-4dfb-9ce8-976eed19b030" x="191" y="2" width="64" height="20"/>
-				<textElement/>
+				<reportElement uuid="1f19782b-41c9-40a6-8715-4d85f4c38269" x="168" y="2" width="70" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[Nombre]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a79fec8b-95d6-41d2-9732-a14ea407bf1e" x="278" y="2" width="60" height="20"/>
-				<textElement/>
+				<reportElement uuid="c046e0fb-8f2e-465b-8744-f9bd5c6afd39" x="250" y="2" width="58" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[Apellido]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="8e545c25-9300-4a72-a808-9150b6e620bd" x="355" y="0" width="100" height="20"/>
-				<textElement/>
+				<reportElement uuid="ff8311a3-16ab-46f9-96ca-308ff0ce89d8" x="319" y="2" width="74" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[Fecha Nacimiento]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="b4ca7453-065f-4892-aca8-da392af6b155" x="470" y="2" width="53" height="20"/>
-				<textElement/>
+				<reportElement uuid="74feeda1-c2f9-481e-b62d-a29fe97de4d3" x="404" y="0" width="57" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[Edad]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="225a86c7-8278-4a61-8321-f596a57d9b7e" x="537" y="2" width="61" height="20"/>
-				<textElement/>
-				<text><![CDATA[Sexo]]></text>
+				<reportElement uuid="bd4520b3-2af4-4068-8eb4-67e92425a787" x="475" y="2" width="78" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Genero]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="a4700a8c-1636-4e02-a47c-e524ca0bd9a9" x="609" y="2" width="100" height="20"/>
-				<textElement/>
+				<reportElement uuid="a3f235ee-7d0a-4090-aa4b-857f764b5134" x="567" y="0" width="86" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[Ciudad Residencia]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="91f72af9-09ac-40aa-968d-353bae91635d" x="721" y="2" width="31" height="20"/>
-				<textElement/>
+				<reportElement uuid="45a62fac-2e5b-430b-8c22-2e947648709d" x="665" y="2" width="63" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<text><![CDATA[EPS]]></text>
 			</staticText>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="34" splitType="Stretch">
+		<band height="43" splitType="Stretch">
 			<textField>
-				<reportElement uuid="64b305e9-f25e-4ea2-b5bd-ad2f73db5272" x="0" y="0" width="59" height="20"/>
-				<textElement/>
+				<reportElement uuid="101cdb7c-6f61-48c6-9b8f-7e92111e4dd6" x="0" y="0" width="72" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Tipo Identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="0296bcb7-0762-4d66-829b-8662821643ee" x="100" y="0" width="64" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Documento}]]></textFieldExpression>
+				<reportElement uuid="a59dabed-3800-44b5-8b99-8140e413f773" x="89" y="0" width="65" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Identificacion}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8d766998-8022-41e9-9394-a88967e63614" x="191" y="0" width="64" height="20"/>
-				<textElement/>
+				<reportElement uuid="70d8a1f3-aef6-479a-b374-50dd6df683e8" x="166" y="0" width="72" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="eda1b1db-3805-46f6-afcc-d5b45abe7760" x="278" y="0" width="60" height="20"/>
-				<textElement/>
+				<reportElement uuid="06a40aeb-8d01-4d56-90a0-764874abd5b9" x="250" y="0" width="58" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Apellido}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="804c2e14-2881-4061-9c3c-af44bd072b83" x="355" y="0" width="64" height="20"/>
+				<reportElement uuid="e2681924-8719-426b-9457-b1c6e829aaca" x="319" y="0" width="74" height="20"/>
 				<textElement/>
 				<textFieldExpression><![CDATA[$F{Fecha Nacimiento}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="de75ba54-543c-4c90-b674-50376302da61" x="470" y="0" width="53" height="20"/>
-				<textElement/>
+				<reportElement uuid="3a8aa1ad-6616-490d-a151-65b1e65be4aa" x="404" y="0" width="57" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Edad}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="85e28c0f-5268-4aed-93b5-4bb2b50f21bf" x="537" y="0" width="61" height="20"/>
-				<textElement/>
-				<textFieldExpression><![CDATA[$F{Sexo}]]></textFieldExpression>
+				<reportElement uuid="f892f981-3183-49e3-97c2-258d41653e80" x="475" y="0" width="78" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Genero}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="af692e8e-1d26-4d10-a5fe-f04efcc1f319" x="609" y="0" width="57" height="20"/>
-				<textElement/>
+				<reportElement uuid="5306f661-af66-4345-b0f6-50490e3bef8f" x="567" y="0" width="86" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Ciudad Residencia}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8a05198c-8a16-41be-a3ea-e5676d987fc6" x="677" y="0" width="75" height="20"/>
-				<textElement/>
+				<reportElement uuid="c56d8c4f-6972-4392-8180-d2adc89dbe8d" x="665" y="0" width="63" height="20"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{EPS}]]></textFieldExpression>
 			</textField>
 		</band>

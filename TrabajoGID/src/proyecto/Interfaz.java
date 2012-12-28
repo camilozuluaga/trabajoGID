@@ -9,7 +9,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -21,12 +20,10 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
+import net.sf.jasperreports.engine.data.JRCsvDataSource;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -34,8 +31,8 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author jucazuse
  */
-public final class Interfaz extends javax.swing.JFrame {
-
+public final class Interfaz extends javax.swing.JFrame{
+                 
     /* variable que sirve para guardar lo obtenido en la caja de texto 
      * Identificacion*/
     public String nDocumento;
@@ -66,7 +63,8 @@ public final class Interfaz extends javax.swing.JFrame {
     String[] rowfields;
     public String tipoDoc, documento, nombre, apellido,
             fechaNaci, edad1, genero, ciudadRe, ePS;
-
+    JRCsvDataSource dataSource;
+    
     /**
      * Creates new form Interfaz
      */
@@ -76,7 +74,7 @@ public final class Interfaz extends javax.swing.JFrame {
         llenarCbCiudadResidencia();
         llenarCbEPS();
         cargarTabla();
-
+        
 
     }
 
@@ -323,7 +321,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
 
-        generarReporte();
+        reporte();
 
     }//GEN-LAST:event_btnInformeActionPerformed
 
@@ -384,6 +382,7 @@ public final class Interfaz extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -503,6 +502,10 @@ public final class Interfaz extends javax.swing.JFrame {
         cbEPS.addItem("Cosmited");
     }
 
+    
+    /**En este metodo se recoge la informacion obtenida que el usuario
+     escribe en los campos de textos. y se pintan en el archivo plano*/
+    
     private void guardarArchivo(String t, File file) {
 
         /*esta es la fecha del jDateChooser*/
@@ -652,46 +655,37 @@ public final class Interfaz extends javax.swing.JFrame {
         }
 
     }
+    
+    private JRCsvDataSource getDataSource() throws URISyntaxException, JRException {
 
-    /**
-     * En este metodo se lee el archivo y se obtiene las posiciones que despues
-     * seran impresas en un documento PDF
-     */
-    public void generarReporte() {
+        String[] nombreColumnas = new String[]{"Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Genero", "Ciudad Residencia", "EPS"};
+        File f1 = null;
+        f1 = new File(getClass().getResource("/archivo/registro.txt").toURI());
+        String filePath = f1.getAbsolutePath().toString();
+        dataSource = new JRCsvDataSource(filePath);
+        dataSource.setFieldDelimiter(';');
+        dataSource.setColumnNames(nombreColumnas);
+        return dataSource;
+    }
+
+    public void reporte() {
         try {
-            try {
-
-                Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
-                while (scan.hasNext()) {
-                    fila = scan.nextLine();
-                    fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
-                    posiciones = fila.split(";");
-                    Metodos metodo = new Metodos();
-                    Datos datos = new Datos(posiciones[0], posiciones[1], posiciones[2], posiciones[3], posiciones[4], posiciones[5], posiciones[6], posiciones[7], posiciones[8]);
-
-                    metodo.addDatos(datos);
-                    URL url = this.getClass().getResource("/archivo/registrados.jasper");
-                    JasperReport reporte = (JasperReport) JRLoader.loadObject(url);
-                    JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, metodo);
-                    JRExporter exporter = new JRPdfExporter();
-                    exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-                    exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Registrados.pdf"));
-                    exporter.exportReport();
-                    JasperViewer viewer = new JasperViewer(jasperPrint);
-                    viewer.setTitle("Registrados");
-                    viewer.setVisible(true);
-                    posiciones = null;
-                }
-
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (FileNotFoundException x) {
-                System.out.println("No se pudo encontrar el archivo");
-            }
-
-        } catch (JRException ex) {
+            File f = null;
+            f = new File(getClass().getResource("/archivo/registrados.jasper").toURI());
+            String rutaAbsoluta = f.getAbsolutePath().toString();
+            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(rutaAbsoluta);
+            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, getDataSource());
+            JasperViewer ver = new JasperViewer(jasperPrint);
+            ver.setTitle("Registrados");
+            ver.setVisible(true);
+        } catch (URISyntaxException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-
+        } catch (JRException ex) {
+            System.out.println("error generando el reporte " + ex);
+            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+
+
     }
 }
