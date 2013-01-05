@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.StringTokenizer;
 import java.util.logging.Level;
@@ -20,10 +21,13 @@ import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.JRException;
+import net.sf.jasperreports.engine.JRExporter;
+import net.sf.jasperreports.engine.JRExporterParameter;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
+import net.sf.jasperreports.engine.export.JRPdfExporter;
 import net.sf.jasperreports.engine.util.JRLoader;
 import net.sf.jasperreports.view.JasperViewer;
 
@@ -31,8 +35,8 @@ import net.sf.jasperreports.view.JasperViewer;
  *
  * @author jucazuse
  */
-public final class Interfaz extends javax.swing.JFrame{
-                 
+public final class Interfaz extends javax.swing.JFrame {
+
     /* variable que sirve para guardar lo obtenido en la caja de texto 
      * Identificacion*/
     public String nDocumento;
@@ -51,20 +55,31 @@ public final class Interfaz extends javax.swing.JFrame{
     public String sexo;
     /*variable a la que se le pasa si hay mas token en la cadena determinada*/
     public String line;
+    /*Clase para escribir (Archivos)*/
     FileWriter fichero = null;
+    /*Clase para escribir diferentes tipos de elementos*/
     PrintWriter pw = null;
+    /*Variable que sirve para guardar la siguiente linea 
+     del texto leido */
     String fila;
+    /*Array de tipo String que despues de cortar la linea del archivo
+     leido guarda los datos obtenidos*/
     String[] posiciones;
+    /*Variable de tipo File donde le damos la ruta donde se encuentra nuestro 
+     archivo tanto para ser leido como modificado*/
     File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt");
+    
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
+    /**/
     DefaultTableModel modeloTabla;
     String[] rowfields;
     public String tipoDoc, documento, nombre, apellido,
             fechaNaci, edad1, genero, ciudadRe, ePS;
     JRCsvDataSource dataSource;
-    
+    private String idioma;
+
     /**
      * Creates new form Interfaz
      */
@@ -74,7 +89,10 @@ public final class Interfaz extends javax.swing.JFrame{
         llenarCbCiudadResidencia();
         llenarCbEPS();
         cargarTabla();
-        
+        idioma=configLenguage();
+        obtenerLenguage();
+
+
 
     }
 
@@ -89,26 +107,26 @@ public final class Interfaz extends javax.swing.JFrame{
 
         buttonGroup1 = new javax.swing.ButtonGroup();
         jLayeredPane1 = new javax.swing.JLayeredPane();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
+        lbTipoIdentificacion = new javax.swing.JLabel();
+        lbNombre = new javax.swing.JLabel();
+        lbFechaNacimiento = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         cbIdentificacion = new javax.swing.JComboBox();
         jDateFecha = new com.toedter.calendar.JDateChooser();
         cbCiudadR = new javax.swing.JComboBox();
-        jLabel4 = new javax.swing.JLabel();
+        lbCiudadResidencia = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
+        lbIdentificacion = new javax.swing.JLabel();
+        lbApellido = new javax.swing.JLabel();
+        lbSexo = new javax.swing.JLabel();
+        lbEPS = new javax.swing.JLabel();
         txtIdentificacion = new javax.swing.JTextField();
         txtApellidos = new javax.swing.JTextField();
         rbFemenino = new javax.swing.JRadioButton();
         rbMasculino = new javax.swing.JRadioButton();
         cbEPS = new javax.swing.JComboBox();
         jLayeredPane2 = new javax.swing.JLayeredPane();
-        jLabel9 = new javax.swing.JLabel();
+        lbBuscar = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
         jTRegistro = new javax.swing.JTable();
         btnInforme = new javax.swing.JButton();
@@ -117,20 +135,13 @@ public final class Interfaz extends javax.swing.JFrame{
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLayeredPane1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Usuario", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, null, new java.awt.Color(0, 0, 255)));
+        lbTipoIdentificacion.setBounds(20, 24, 100, 20);
+        jLayeredPane1.add(lbTipoIdentificacion, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbNombre.setBounds(20, 64, 110, 20);
+        jLayeredPane1.add(lbNombre, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbFechaNacimiento.setBounds(20, 110, 150, 30);
+        jLayeredPane1.add(lbFechaNacimiento, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jLabel1.setText("Tipo Identificacion");
-        jLabel1.setBounds(20, 24, 100, 20);
-        jLayeredPane1.add(jLabel1, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel2.setText("Nombre");
-        jLabel2.setBounds(20, 70, 90, 14);
-        jLayeredPane1.add(jLabel2, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel3.setText("Fecha Nacimiento");
-        jLabel3.setBounds(20, 120, 110, 14);
-        jLayeredPane1.add(jLabel3, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        btnGuardar.setText("Guardar Usuario");
         btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 btnGuardarMouseReleased(evt);
@@ -151,10 +162,8 @@ public final class Interfaz extends javax.swing.JFrame{
 
         cbCiudadR.setBounds(170, 160, 180, 30);
         jLayeredPane1.add(cbCiudadR, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel4.setText("Ciudad Residencia");
-        jLabel4.setBounds(20, 170, 100, 20);
-        jLayeredPane1.add(jLabel4, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbCiudadResidencia.setBounds(20, 170, 120, 20);
+        jLayeredPane1.add(lbCiudadResidencia, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtNombre.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -163,22 +172,16 @@ public final class Interfaz extends javax.swing.JFrame{
         });
         txtNombre.setBounds(170, 60, 180, 30);
         jLayeredPane1.add(txtNombre, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbIdentificacion.setBounds(400, 20, 110, 30);
+        jLayeredPane1.add(lbIdentificacion, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbApellido.setBounds(400, 60, 90, 30);
+        jLayeredPane1.add(lbApellido, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbSexo.setBounds(400, 110, 80, 30);
+        jLayeredPane1.add(lbSexo, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        jLabel5.setText("Identificacion");
-        jLabel5.setBounds(400, 20, 110, 30);
-        jLayeredPane1.add(jLabel5, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel6.setText("Apellidos");
-        jLabel6.setBounds(400, 60, 90, 30);
-        jLayeredPane1.add(jLabel6, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel7.setText("Sexo");
-        jLabel7.setBounds(400, 110, 80, 30);
-        jLayeredPane1.add(jLabel7, javax.swing.JLayeredPane.DEFAULT_LAYER);
-
-        jLabel8.setText("EPS");
-        jLabel8.setBounds(400, 160, 50, 30);
-        jLayeredPane1.add(jLabel8, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbEPS.setText("EPS");
+        lbEPS.setBounds(400, 160, 50, 30);
+        jLayeredPane1.add(lbEPS, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtIdentificacion.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
@@ -197,23 +200,19 @@ public final class Interfaz extends javax.swing.JFrame{
         jLayeredPane1.add(txtApellidos, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         buttonGroup1.add(rbFemenino);
-        rbFemenino.setText("Femenino");
-        rbFemenino.setBounds(510, 110, 80, 23);
+        rbFemenino.setBounds(510, 110, 80, 21);
         jLayeredPane1.add(rbFemenino, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         buttonGroup1.add(rbMasculino);
-        rbMasculino.setText("Masculino");
-        rbMasculino.setBounds(610, 110, 80, 23);
+        rbMasculino.setBounds(610, 110, 80, 21);
         jLayeredPane1.add(rbMasculino, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         cbEPS.setBounds(510, 160, 190, 30);
         jLayeredPane1.add(cbEPS, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLayeredPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Listado Usuarios"));
-
-        jLabel9.setText("Buscar Usuarios por Cedula");
-        jLabel9.setBounds(10, 30, 160, 30);
-        jLayeredPane2.add(jLabel9, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        lbBuscar.setBounds(10, 30, 160, 30);
+        jLayeredPane2.add(lbBuscar, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jTRegistro.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -236,7 +235,6 @@ public final class Interfaz extends javax.swing.JFrame{
         jScrollPane2.setBounds(10, 70, 1080, 120);
         jLayeredPane2.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnInforme.setText("Informe de Usuario");
         btnInforme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInformeActionPerformed(evt);
@@ -262,10 +260,9 @@ public final class Interfaz extends javax.swing.JFrame{
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE)
-                    .addComponent(jLayeredPane1))
+                .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE)
                 .addContainerGap())
+            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -322,6 +319,7 @@ public final class Interfaz extends javax.swing.JFrame{
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
 
         reporte();
+        btnGuardar.setText(ResourceBundle.getBundle("Lang_es_ES").getString("btnGuardar"));
 
     }//GEN-LAST:event_btnInformeActionPerformed
 
@@ -382,7 +380,7 @@ public final class Interfaz extends javax.swing.JFrame{
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -421,19 +419,19 @@ public final class Interfaz extends javax.swing.JFrame{
     private javax.swing.JComboBox cbEPS;
     private javax.swing.JComboBox cbIdentificacion;
     private com.toedter.calendar.JDateChooser jDateFecha;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
-    private javax.swing.JLabel jLabel9;
     private javax.swing.JLayeredPane jLayeredPane1;
     private javax.swing.JLayeredPane jLayeredPane2;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTable jTRegistro;
+    private javax.swing.JLabel lbApellido;
+    private javax.swing.JLabel lbBuscar;
+    private javax.swing.JLabel lbCiudadResidencia;
+    private javax.swing.JLabel lbEPS;
+    private javax.swing.JLabel lbFechaNacimiento;
+    private javax.swing.JLabel lbIdentificacion;
+    private javax.swing.JLabel lbNombre;
+    private javax.swing.JLabel lbSexo;
+    private javax.swing.JLabel lbTipoIdentificacion;
     private javax.swing.JRadioButton rbFemenino;
     private javax.swing.JRadioButton rbMasculino;
     private javax.swing.JTextField txtApellidos;
@@ -502,10 +500,10 @@ public final class Interfaz extends javax.swing.JFrame{
         cbEPS.addItem("Cosmited");
     }
 
-    
-    /**En este metodo se recoge la informacion obtenida que el usuario
-     escribe en los campos de textos. y se pintan en el archivo plano*/
-    
+    /**
+     * En este metodo se recoge la informacion obtenida que el usuario escribe
+     * en los campos de textos. y se pintan en el archivo plano
+     */
     private void guardarArchivo(String t, File file) {
 
         /*esta es la fecha del jDateChooser*/
@@ -655,7 +653,7 @@ public final class Interfaz extends javax.swing.JFrame{
         }
 
     }
-    
+
     private JRCsvDataSource getDataSource() throws URISyntaxException, JRException {
 
         String[] nombreColumnas = new String[]{"Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Genero", "Ciudad Residencia", "EPS"};
@@ -678,14 +676,49 @@ public final class Interfaz extends javax.swing.JFrame{
             JasperViewer ver = new JasperViewer(jasperPrint);
             ver.setTitle("Registrados");
             ver.setVisible(true);
+            JRExporter exporter = new JRPdfExporter();
+            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
+            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Usuarios Registrados.pdf"));
+            exporter.exportReport();
         } catch (URISyntaxException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
             System.out.println("error generando el reporte " + ex);
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
 
+    private String configLenguage() {
+        ResourceBundle config;
+        String propiedades = "Español_es";
+        config = ResourceBundle.getBundle("Configuracion");
+        if ("es".equals(config.getString("lenguage"))) {
+            propiedades = "Espannol_es";
+        } else if ("en".equals(config.getString("lenguage"))) {
+            propiedades = "Ingles_en";
+        }
+        return propiedades;
+    }
 
-
+    private void obtenerLenguage() {
+        try{
+        btnGuardar.setText(ResourceBundle.getBundle(idioma).getString("btnGuardar"));
+        btnInforme.setText(ResourceBundle.getBundle(idioma).getString("btnInforme"));
+        lbTipoIdentificacion.setText(ResourceBundle.getBundle(idioma).getString("lbTipoIdentificacion"));
+        lbIdentificacion.setText(ResourceBundle.getBundle(idioma).getString("lbIdentificacion"));
+        lbNombre.setText(ResourceBundle.getBundle(idioma).getString("lbNombre"));
+        lbApellido.setText(ResourceBundle.getBundle(idioma).getString("lbApellido"));
+        lbFechaNacimiento.setText(ResourceBundle.getBundle(idioma).getString("lbFechaNacimiento"));
+        lbSexo.setText(ResourceBundle.getBundle(idioma).getString("lbSexo"));
+        lbCiudadResidencia.setText(ResourceBundle.getBundle(idioma).getString("lbCiudadResidencia"));
+        lbBuscar.setText(ResourceBundle.getBundle(idioma).getString("lbBuscar"));
+        rbFemenino.setText(ResourceBundle.getBundle(idioma).getString("rbFemenino"));
+        rbMasculino.setText(ResourceBundle.getBundle(idioma).getString("rbMasculino"));
+        } catch (ExceptionInInitializerError e) {
+            System.out.println("error no se pudo encontrar el archivo " + e);
+        }
+        catch(Exception e){
+            System.out.println("error general " + e );
+        }
     }
 }
