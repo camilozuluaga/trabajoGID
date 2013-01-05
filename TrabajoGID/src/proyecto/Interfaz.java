@@ -68,15 +68,15 @@ public final class Interfaz extends javax.swing.JFrame {
     /*Variable de tipo File donde le damos la ruta donde se encuentra nuestro 
      archivo tanto para ser leido como modificado*/
     File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt");
-    
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
     int anno = annoSistema.get(Calendar.YEAR);
     /**/
     DefaultTableModel modeloTabla;
     String[] rowfields;
-    public String tipoDoc, documento, nombre, apellido,
+    private String tipoDoc, documento, nombre, apellido,
             fechaNaci, edad1, genero, ciudadRe, ePS;
+    /*lee una secuencia de archivo CSV*/
     JRCsvDataSource dataSource;
     private String idioma;
 
@@ -91,9 +91,6 @@ public final class Interfaz extends javax.swing.JFrame {
         cargarTabla();
         idioma=configLenguage();
         obtenerLenguage();
-
-
-
     }
 
     /**
@@ -279,37 +276,41 @@ public final class Interfaz extends javax.swing.JFrame {
 
     @SuppressWarnings("empty-statement")
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        /*esta variable captura el año de nacimiento */
+        /*esta variable obtiene el año de nacimiento*/
         annoNaci = jDateFecha.getCalendar().get(Calendar.YEAR);
 
         /*esta variable nos muestra la edad*/
         edad = (anno - annoNaci);
 
-
-        /*Aqui obtenemos la fecha del JDateChooser y le damos 
-         * formato*/
+        /*Aqui obtenemos la fecha del JDateChooser*/
         Date date = jDateFecha.getDate();
+
+        /*preparamos el formato que se le dara a la fecha.
+         de esta forma es que se le da el formato a la fecha
+         dt.format(date)*/
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
 
-        /*este es una condicion con operadores ternarios para ver el sexo  */
+        /*este es una condicion con operadores ternarios para ver el sexo */
         sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
 
         /*con esto le damos el modelo a la tabla */
         modeloTabla = (DefaultTableModel) jTRegistro.getModel();
 
-        /*con esto llenamos la tabla  */
+        /*Nombre de las filas que va a tener la tabla*/
         Object nuevo[] = {
             contador++, cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
             txtApellidos.getText(), dt.format(date), edad, sexo,
             cbCiudadR.getSelectedItem(), cbEPS.getSelectedItem()
         };
 
-        /*con esto añadimos los datos a la tabla */
+        /*añadimos las filas a la tabla */
         modeloTabla.addRow(nuevo);
 
         /*metodo para guardar el archivo */
-        guardarArchivo(";", file);
-
+        guardarArchivo(file);
+        
+        /*limpiamos los campos de texto despues de haber guardado 
+         la informacion*/
         txtIdentificacion.setText("");
         txtNombre.setText("");
         txtApellidos.setText("");
@@ -317,29 +318,32 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-
         reporte();
-        btnGuardar.setText(ResourceBundle.getBundle("Lang_es_ES").getString("btnGuardar"));
-
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
         compararDocumento();
 
+        /*condicion para validar los campos de texto para que solo contengan 
+         numeros*/
         if (!txtIdentificacion.getText().matches("[ 0-9 ]*")) {
-            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosInvalidos"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtIdentificacion.setText("");
         }
         nDocumento = txtIdentificacion.getText();
         tam = nDocumento.length();
+
+        /*condicion para validar que los  campos de texto no excedan el tamaño. 
+         en este caso una cedula que tiene 10 digitos por ejemplo*/
         if (tam > 12) {
-            JOptionPane.showMessageDialog(this, "EL NUMERO DE CEDULA NO ES VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosCedula"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtIdentificacion.setText("");
         }
-
     }//GEN-LAST:event_txtIdentificacionKeyReleased
 
     private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
+        /*para activar el boton despues de haber sido bloqueado si el numero
+         de cedula ya aparece registrado*/
         btnGuardar.setEnabled(true);
     }//GEN-LAST:event_btnGuardarMouseReleased
 
@@ -348,22 +352,24 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_txtBuscarKeyPressed
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
+        /*condicion para validar que en el campo de texto solo hayan 
+         letras*/
         if (!txtNombre.getText().matches("[ /s a-zA-z]*")) {
-            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosInvalidos"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtNombre.setText("");
         }
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void txtApellidosKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtApellidosKeyReleased
         if (!txtApellidos.getText().matches("[ /s a-zA-z]*")) {
-            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosInvalidos"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtApellidos.setText("");
         }
     }//GEN-LAST:event_txtApellidosKeyReleased
 
     private void txtBuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtBuscarKeyReleased
         if (!txtBuscar.getText().matches("[ 0-9 ]*")) {
-            JOptionPane.showMessageDialog(this, "DATO INGRESADO NO VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosInvalidos"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtBuscar.setText("");
         }
         /*variable de la cedula*/
@@ -371,7 +377,7 @@ public final class Interfaz extends javax.swing.JFrame {
         /*tamaño del String*/
         tam = nDocumento.length();
         if (tam > 12) {
-            JOptionPane.showMessageDialog(this, "EL NUMERO DE CEDULA NO ES VALIDO", "VALIDACION", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosCedula"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtBuscar.setText("");
         }
     }//GEN-LAST:event_txtBuscarKeyReleased
@@ -501,18 +507,23 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     /**
-     * En este metodo se recoge la informacion obtenida que el usuario escribe
-     * en los campos de textos. y se pintan en el archivo plano
+     * Este metodo funciona de la siguiente manera:
+     * 1.
      */
-    private void guardarArchivo(String t, File file) {
-
+    private void guardarArchivo(File file) {
         /*esta es la fecha del jDateChooser*/
         Date date = jDateFecha.getDate();
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
 
-        /*se separa el texto cada salto de linea*/
-        StringTokenizer st = new StringTokenizer(t, "/n");
+        /*token: subString*/
+        
+        /*divide una cadena en tokens. atendiendo a un delimitador en concreto*/
+        StringTokenizer st = new StringTokenizer("/n",";");
 
+        /*hasMoreTokens: Mira si hay mas tokens en el array de token que tiene 
+         StringTokenizer*/
+        
+        /*nextToken: devuelve el siguiente token*/
         try {
             fichero = new FileWriter(file, true);
             pw = new PrintWriter(fichero);
@@ -538,6 +549,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 pw.print(cbEPS.getSelectedItem());
                 pw.print(";");
                 pw.println();
+                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -568,7 +580,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     posiciones = fila.split(";");
                     for (int i = 0; i < posiciones.length; i++) {
                         if (posiciones[i].equals(txtIdentificacion.getText())) {
-                            JOptionPane.showMessageDialog(this, "El Numero de Cedula ya Esta Registrado",
+                            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("validarCedula"),
                                     ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
                             btnGuardar.setEnabled(false);
                             txtIdentificacion.setText("");
@@ -638,7 +650,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 nombre = posiciones[2];
                 apellido = posiciones[3];
                 if (txtBuscar.getText().equals(documento)) {
-                    JOptionPane.showMessageDialog(this, "El Usuario esta Registrado con el Nombre de:  ".concat(nombre).concat(" ")
+                    JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("usuarioRegistrado").concat(nombre).concat(" ")
                             .concat(apellido), "Informacion", JOptionPane.INFORMATION_MESSAGE);
                     txtBuscar.setText("");
                 }
