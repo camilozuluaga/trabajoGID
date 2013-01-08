@@ -20,16 +20,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import net.sf.jasperreports.engine.JRException;
-import net.sf.jasperreports.engine.JRExporter;
-import net.sf.jasperreports.engine.JRExporterParameter;
-import net.sf.jasperreports.engine.JasperFillManager;
-import net.sf.jasperreports.engine.JasperPrint;
-import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
-import net.sf.jasperreports.engine.export.JRPdfExporter;
-import net.sf.jasperreports.engine.util.JRLoader;
-import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -318,7 +309,8 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-        reporte();
+        Hilo hilo=new Hilo("hilo para generar el reporte");
+        hilo.start();
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
@@ -666,40 +658,6 @@ public final class Interfaz extends javax.swing.JFrame {
 
     }
 
-    private JRCsvDataSource getDataSource() throws URISyntaxException, JRException {
-
-        String[] nombreColumnas = new String[]{"Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Genero", "Ciudad Residencia", "EPS"};
-        File f1 = null;
-        f1 = new File(getClass().getResource("/archivo/registro.txt").toURI());
-        String filePath = f1.getAbsolutePath().toString();
-        dataSource = new JRCsvDataSource(filePath);
-        dataSource.setFieldDelimiter(';');
-        dataSource.setColumnNames(nombreColumnas);
-        return dataSource;
-    }
-
-    public void reporte() {
-        try {
-            File f = null;
-            f = new File(getClass().getResource("/archivo/registrados.jasper").toURI());
-            String rutaAbsoluta = f.getAbsolutePath().toString();
-            JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(rutaAbsoluta);
-            JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, getDataSource());
-            JasperViewer ver = new JasperViewer(jasperPrint);
-            ver.setTitle("Registrados");
-            ver.setVisible(true);
-            JRExporter exporter = new JRPdfExporter();
-            exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
-            exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Usuarios Registrados.pdf"));
-            exporter.exportReport();
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (JRException ex) {
-            System.out.println("error generando el reporte " + ex);
-            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
     private String configLenguage() {
         ResourceBundle config;
         String propiedades = "Español_es";
@@ -713,24 +671,23 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     private void obtenerLenguage() {
-        try{
-        btnGuardar.setText(ResourceBundle.getBundle(idioma).getString("btnGuardar"));
-        btnInforme.setText(ResourceBundle.getBundle(idioma).getString("btnInforme"));
-        lbTipoIdentificacion.setText(ResourceBundle.getBundle(idioma).getString("lbTipoIdentificacion"));
-        lbIdentificacion.setText(ResourceBundle.getBundle(idioma).getString("lbIdentificacion"));
-        lbNombre.setText(ResourceBundle.getBundle(idioma).getString("lbNombre"));
-        lbApellido.setText(ResourceBundle.getBundle(idioma).getString("lbApellido"));
-        lbFechaNacimiento.setText(ResourceBundle.getBundle(idioma).getString("lbFechaNacimiento"));
-        lbSexo.setText(ResourceBundle.getBundle(idioma).getString("lbSexo"));
-        lbCiudadResidencia.setText(ResourceBundle.getBundle(idioma).getString("lbCiudadResidencia"));
-        lbBuscar.setText(ResourceBundle.getBundle(idioma).getString("lbBuscar"));
-        rbFemenino.setText(ResourceBundle.getBundle(idioma).getString("rbFemenino"));
-        rbMasculino.setText(ResourceBundle.getBundle(idioma).getString("rbMasculino"));
+        try {
+            btnGuardar.setText(ResourceBundle.getBundle(idioma).getString("btnGuardar"));
+            btnInforme.setText(ResourceBundle.getBundle(idioma).getString("btnInforme"));
+            lbTipoIdentificacion.setText(ResourceBundle.getBundle(idioma).getString("lbTipoIdentificacion"));
+            lbIdentificacion.setText(ResourceBundle.getBundle(idioma).getString("lbIdentificacion"));
+            lbNombre.setText(ResourceBundle.getBundle(idioma).getString("lbNombre"));
+            lbApellido.setText(ResourceBundle.getBundle(idioma).getString("lbApellido"));
+            lbFechaNacimiento.setText(ResourceBundle.getBundle(idioma).getString("lbFechaNacimiento"));
+            lbSexo.setText(ResourceBundle.getBundle(idioma).getString("lbSexo"));
+            lbCiudadResidencia.setText(ResourceBundle.getBundle(idioma).getString("lbCiudadResidencia"));
+            lbBuscar.setText(ResourceBundle.getBundle(idioma).getString("lbBuscar"));
+            rbFemenino.setText(ResourceBundle.getBundle(idioma).getString("rbFemenino"));
+            rbMasculino.setText(ResourceBundle.getBundle(idioma).getString("rbMasculino"));
         } catch (ExceptionInInitializerError e) {
             System.out.println("error no se pudo encontrar el archivo " + e);
-        }
-        catch(Exception e){
-            System.out.println("error general " + e );
+        } catch (Exception e) {
+            System.out.println("error general " + e);
         }
     }
 }
