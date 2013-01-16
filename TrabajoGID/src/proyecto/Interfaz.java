@@ -13,6 +13,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.StringTokenizer;
@@ -80,8 +81,10 @@ public final class Interfaz extends javax.swing.JFrame {
         llenarCbCiudadResidencia();
         llenarCbEPS();
         cargarTabla();
-        idioma=configLenguage();
+        idioma = configLenguage();
         obtenerLenguage();
+        Locale[]local={new Locale("es","ES")};
+        
     }
 
     /**
@@ -130,6 +133,7 @@ public final class Interfaz extends javax.swing.JFrame {
         lbFechaNacimiento.setBounds(20, 110, 150, 30);
         jLayeredPane1.add(lbFechaNacimiento, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/archivo/1357775393_page_save.png"))); // NOI18N
         btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 btnGuardarMouseReleased(evt);
@@ -140,7 +144,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 btnGuardarActionPerformed(evt);
             }
         });
-        btnGuardar.setBounds(20, 230, 130, 30);
+        btnGuardar.setBounds(20, 220, 170, 40);
         jLayeredPane1.add(btnGuardar, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         cbIdentificacion.setBounds(170, 20, 180, 30);
@@ -223,12 +227,13 @@ public final class Interfaz extends javax.swing.JFrame {
         jScrollPane2.setBounds(10, 70, 1080, 120);
         jLayeredPane2.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
+        btnInforme.setIcon(new javax.swing.ImageIcon(getClass().getResource("/archivo/1357775453_my-reports.png"))); // NOI18N
         btnInforme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInformeActionPerformed(evt);
             }
         });
-        btnInforme.setBounds(20, 260, 160, 30);
+        btnInforme.setBounds(20, 250, 160, 40);
         jLayeredPane2.add(btnInforme, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -275,6 +280,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
         /*Aqui obtenemos la fecha del JDateChooser*/
         Date date = jDateFecha.getDate();
+        
 
         /*preparamos el formato que se le dara a la fecha.
          de esta forma es que se le da el formato a la fecha
@@ -298,8 +304,8 @@ public final class Interfaz extends javax.swing.JFrame {
         modeloTabla.addRow(nuevo);
 
         /*metodo para guardar el archivo */
-        guardarArchivo(file);
-        
+        guardarArchivo();
+
         /*limpiamos los campos de texto despues de haber guardado 
          la informacion*/
         txtIdentificacion.setText("");
@@ -309,8 +315,12 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-        Hilo hilo=new Hilo("hilo para generar el reporte");
+        Hilo hilo = new Hilo("hilo para generar el reporte");
         hilo.start();
+
+
+
+
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
@@ -499,22 +509,18 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     /**
-     * Este metodo funciona de la siguiente manera:
-     * 1.
+     * Este metodo funciona de la siguiente manera: 1.
      */
-    private void guardarArchivo(File file) {
+    private void guardarArchivo() {
         /*esta es la fecha del jDateChooser*/
         Date date = jDateFecha.getDate();
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
-
         /*token: subString*/
-        
         /*divide una cadena en tokens. atendiendo a un delimitador en concreto*/
         StringTokenizer st = new StringTokenizer("/n",";");
-
         /*hasMoreTokens: Mira si hay mas tokens en el array de token que tiene 
          StringTokenizer*/
-        
+
         /*nextToken: devuelve el siguiente token*/
         try {
             fichero = new FileWriter(file, true);
@@ -541,7 +547,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 pw.print(cbEPS.getSelectedItem());
                 pw.print(";");
                 pw.println();
-                
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -577,7 +582,6 @@ public final class Interfaz extends javax.swing.JFrame {
                             btnGuardar.setEnabled(false);
                             txtIdentificacion.setText("");
                         }
-
                     }
                     posiciones = null;
                 }
@@ -660,12 +664,12 @@ public final class Interfaz extends javax.swing.JFrame {
 
     private String configLenguage() {
         ResourceBundle config;
-        String propiedades = "Español_es";
+        String propiedades = "Espannol_es_CO";
         config = ResourceBundle.getBundle("Configuracion");
         if ("es".equals(config.getString("lenguage"))) {
-            propiedades = "Espannol_es";
+            propiedades = "Espannol_es_CO";
         } else if ("en".equals(config.getString("lenguage"))) {
-            propiedades = "Ingles_en";
+            propiedades = "Ingles_en_US";
         }
         return propiedades;
     }

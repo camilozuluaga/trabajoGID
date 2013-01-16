@@ -32,7 +32,6 @@ public final class Hilo extends Thread {
     }
 
     private JRCsvDataSource getDataSource() throws URISyntaxException, JRException {
-
         String[] nombreColumnas = new String[]{"Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Genero", "Ciudad Residencia", "EPS"};
         File f1 = null;
         f1 = new File(getClass().getResource("/archivo/registro.txt").toURI());
@@ -53,11 +52,11 @@ public final class Hilo extends Thread {
             JasperViewer ver = new JasperViewer(jasperPrint);
             ver.setTitle("Registrados");
             ver.setVisible(true);
-
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Usuarios Registrados.pdf"));
             exporter.exportReport();
+
         } catch (URISyntaxException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (JRException ex) {
