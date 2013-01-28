@@ -507,10 +507,6 @@ public final class Interfaz extends javax.swing.JFrame {
         cbEPS.addItem("Cosmited");
     }
 
-    /**
-     * 
-     */
-    
     private void guardarArchivo() {
         /*esta es la fecha del jDateChooser*/
         Date date = jDateFecha.getDate();
