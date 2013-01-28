@@ -9,6 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.net.URISyntaxException;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -32,6 +33,19 @@ public final class Interfaz extends javax.swing.JFrame {
     /* variable que sirve para guardar lo obtenido en la caja de texto 
      * Identificacion*/
     public String nDocumento;
+    /*Variable donde se guarda el genero del usuari@*/
+    public String sexo;
+    /*variable a la que se le pasa si hay mas token en la cadena determinada*/
+    public String line;
+    /*Variable que sirve para guardar la siguiente linea 
+     del texto leido */
+    public String fila;
+    /*Array de tipo String que despues de cortar la linea del archivo
+     leido guarda los datos obtenidos*/
+    public String[] posiciones;
+    public String tipoDoc, documento, nombre, apellido,
+            fechaNaci, edad1, genero, ciudadRe, ePS;
+    public String idioma;
     /*tamaño del string Identificacion*/
     public int tam;
     /*indice de la tabla */
@@ -43,34 +57,19 @@ public final class Interfaz extends javax.swing.JFrame {
      * resultados: se restan y ahi da la edad del usuario.
      */
     public int edad;
-    /*Variable donde se guarda el genero del usuari@*/
-    public String sexo;
-    /*variable a la que se le pasa si hay mas token en la cadena determinada*/
-    public String line;
     /*Clase para escribir (Archivos)*/
     FileWriter fichero = null;
     /*Clase para escribir diferentes tipos de elementos*/
     PrintWriter pw = null;
-    /*Variable que sirve para guardar la siguiente linea 
-     del texto leido */
-    String fila;
-    /*Array de tipo String que despues de cortar la linea del archivo
-     leido guarda los datos obtenidos*/
-    String[] posiciones;
     /*Variable de tipo File donde le damos la ruta donde se encuentra nuestro 
      archivo tanto para ser leido como modificado*/
     File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt");
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
-    int anno = annoSistema.get(Calendar.YEAR);
-    /**/
+    public int anno = annoSistema.get(Calendar.YEAR);
     DefaultTableModel modeloTabla;
-    String[] rowfields;
-    private String tipoDoc, documento, nombre, apellido,
-            fechaNaci, edad1, genero, ciudadRe, ePS;
     /*lee una secuencia de archivo CSV*/
     JRCsvDataSource dataSource;
-    private String idioma;
 
     /**
      * Creates new form Interfaz
@@ -83,10 +82,14 @@ public final class Interfaz extends javax.swing.JFrame {
         cargarTabla();
         idioma = configLenguage();
         obtenerLenguage();
-        Locale[]local={new Locale("es","ES")};
         
+       
+        Date d = new Date();
+        DateFormat dt1 = DateFormat.getDateInstance(DateFormat.FULL, new Locale("en"));
+        System.out.println(dt1.format(d));
+      
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -317,10 +320,6 @@ public final class Interfaz extends javax.swing.JFrame {
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
         Hilo hilo = new Hilo("hilo para generar el reporte");
         hilo.start();
-
-
-
-
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
@@ -509,15 +508,16 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     /**
-     * Este metodo funciona de la siguiente manera: 1.
+     * 
      */
+    
     private void guardarArchivo() {
         /*esta es la fecha del jDateChooser*/
         Date date = jDateFecha.getDate();
         SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
         /*token: subString*/
         /*divide una cadena en tokens. atendiendo a un delimitador en concreto*/
-        StringTokenizer st = new StringTokenizer("/n",";");
+        StringTokenizer st = new StringTokenizer("/n", ";");
         /*hasMoreTokens: Mira si hay mas tokens en el array de token que tiene 
          StringTokenizer*/
 
@@ -563,9 +563,19 @@ public final class Interfaz extends javax.swing.JFrame {
 
     /**
      * Este metodo lo que hace es leer el archivo y comparar si el numero de
-     * Documento Inscrito en el jTextField es igual al que hay en el archivo
+     * Documento Inscrito en el jTextField "txtIdentificacion" es igual al que hay en el archivo
      * plano. si son iguales mandara un mensaje de informacion al usuario
      */
+    
+    /*hasNext: este metodo devuelve true (verdadero)
+     si hay algo mas para leer. por eso se usa como
+     en la forma de un iterador*/
+    
+    /*nextLine:lee la linea completa del documento*/
+    
+    /*split: corta en donde este el separador en este 
+     caso el punto y como (;) y guarda en un array 
+     las posiciones en las que va quedando la informacion*/
     public void compararDocumento() {
         try {
             Scanner scan;
@@ -573,15 +583,13 @@ public final class Interfaz extends javax.swing.JFrame {
                 scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
                 while (scan.hasNext()) {
                     fila = scan.nextLine();
-                    fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                     posiciones = fila.split(";");
-                    for (int i = 0; i < posiciones.length; i++) {
-                        if (posiciones[i].equals(txtIdentificacion.getText())) {
-                            JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("validarCedula"),
-                                    ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
-                            btnGuardar.setEnabled(false);
-                            txtIdentificacion.setText("");
-                        }
+                    if (posiciones[1].equals(txtIdentificacion.getText())) {
+                        System.out.println("posicion " + posiciones[1]);
+                        JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("validarCedula"),
+                                ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
+                        btnGuardar.setEnabled(false);
+                        txtIdentificacion.setText("");
                     }
                     posiciones = null;
                 }
@@ -598,15 +606,14 @@ public final class Interfaz extends javax.swing.JFrame {
      * Este metodo lee el documento y lo separa en un String de vectores (Array)
      * y se obtiene la posiciones en que estan guardados los datos en el archivo
      * plano para despues pasarselos a un array de Objetos que seran pasados al
-     * modelo de la tabla para que esta los acomode en u respectiva columna
+     * modelo de la tabla para que esta los acomode en su respectiva columna
      */
     public void cargarTabla() {
         try {
             modeloTabla = (DefaultTableModel) jTRegistro.getModel();
             Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
             while (scan.hasNext()) {
-                fila = scan.nextLine();
-                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
+                fila = scan.nextLine();//devuelve la siguiente linea del fichero
                 posiciones = fila.split(";");
                 tipoDoc = posiciones[0];
                 documento = posiciones[1];
@@ -640,7 +647,6 @@ public final class Interfaz extends javax.swing.JFrame {
             Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
             while (scan.hasNext()) {
                 fila = scan.nextLine();
-                fila = fila.replace(", ", ","); //Quitamos los espacios en blanco despues de la coma 
                 posiciones = fila.split(";");
                 documento = posiciones[1];
                 nombre = posiciones[2];
@@ -651,9 +657,7 @@ public final class Interfaz extends javax.swing.JFrame {
                     txtBuscar.setText("");
                 }
                 posiciones = null;
-
             }
-
         } catch (URISyntaxException ex) {
             Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException x) {
@@ -661,7 +665,23 @@ public final class Interfaz extends javax.swing.JFrame {
         }
 
     }
-
+    
+    /*ResourceBundle: PAQUETE DE RECURSOS*/
+    
+    /*getBundle: obtiene un ResourceBundle utilizando
+     el nombre base especificado
+     
+     * Parametros: el nombre base del ResourceBundle.
+     * Devuelve: un ResourceBundle. para el nombre de 
+     la base dada y la configuracion regional predeter-
+     minada*/
+    
+     /*getString: Obtiene una cadena dada de ResourceBundle
+      o uno de sus padres
+      
+      * parametros: Clave para la cadena deseada.
+      * devuelve: la cadena de la clave dada 
+      */
     private String configLenguage() {
         ResourceBundle config;
         String propiedades = "Espannol_es_CO";
@@ -673,7 +693,12 @@ public final class Interfaz extends javax.swing.JFrame {
         }
         return propiedades;
     }
-
+    
+   /*ResourceBundle.getBundle(idioma): aca solamente estamos determinando
+    el idioma*/
+    
+    /*getString("btnGuardar")): buscara la etiqueta con el nombre "btnGuardar"
+     y devolvera el valor*/
     private void obtenerLenguage() {
         try {
             btnGuardar.setText(ResourceBundle.getBundle(idioma).getString("btnGuardar"));
