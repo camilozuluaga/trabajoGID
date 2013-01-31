@@ -70,7 +70,7 @@ public final class Interfaz extends javax.swing.JFrame {
     DefaultTableModel modeloTabla;
     /*lee una secuencia de archivo CSV*/
     JRCsvDataSource dataSource;
-
+    Hilo hilo;
     /**
      * Creates new form Interfaz
      */
@@ -87,7 +87,7 @@ public final class Interfaz extends javax.swing.JFrame {
         Date d = new Date();
         DateFormat dt1 = DateFormat.getDateInstance(DateFormat.FULL, new Locale("en"));
         System.out.println(dt1.format(d));
-      
+        hilo = new Hilo();
     }
     
     /**
@@ -236,7 +236,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 btnInformeActionPerformed(evt);
             }
         });
-        btnInforme.setBounds(20, 250, 160, 40);
+        btnInforme.setBounds(20, 210, 160, 40);
         jLayeredPane2.add(btnInforme, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         txtBuscar.addKeyListener(new java.awt.event.KeyAdapter() {
@@ -266,7 +266,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLayeredPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 317, Short.MAX_VALUE)
+                .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 280, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -318,8 +318,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-        Hilo hilo = new Hilo("hilo para generar el reporte");
-        hilo.start();
+     hilo.start();
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
@@ -387,7 +386,7 @@ public final class Interfaz extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-
+        
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -559,16 +558,14 @@ public final class Interfaz extends javax.swing.JFrame {
 
     /**
      * Este metodo lo que hace es leer el archivo y comparar si el numero de
-     * Documento Inscrito en el jTextField "txtIdentificacion" es igual al que hay en el archivo
-     * plano. si son iguales mandara un mensaje de informacion al usuario
+     * Documento Inscrito en el jTextField "txtIdentificacion" es igual al que
+     * hay en el archivo plano. si son iguales mandara un mensaje de informacion
+     * al usuario
      */
-    
     /*hasNext: este metodo devuelve true (verdadero)
      si hay algo mas para leer. por eso se usa como
      en la forma de un iterador*/
-    
     /*nextLine:lee la linea completa del documento*/
-    
     /*split: corta en donde este el separador en este 
      caso el punto y como (;) y guarda en un array 
      las posiciones en las que va quedando la informacion*/
@@ -661,9 +658,8 @@ public final class Interfaz extends javax.swing.JFrame {
         }
 
     }
-    
+
     /*ResourceBundle: PAQUETE DE RECURSOS*/
-    
     /*getBundle: obtiene un ResourceBundle utilizando
      el nombre base especificado
      
@@ -671,28 +667,28 @@ public final class Interfaz extends javax.swing.JFrame {
      * Devuelve: un ResourceBundle. para el nombre de 
      la base dada y la configuracion regional predeter-
      minada*/
-    
-     /*getString: Obtiene una cadena dada de ResourceBundle
-      o uno de sus padres
+    /*getString: Obtiene una cadena dada de ResourceBundle
+     o uno de sus padres
       
-      * parametros: Clave para la cadena deseada.
-      * devuelve: la cadena de la clave dada 
-      */
+     * parametros: Clave para la cadena deseada.
+     * devuelve: la cadena de la clave dada 
+     */
     private String configLenguage() {
         ResourceBundle config;
         String propiedades = "Espannol_es_CO";
         config = ResourceBundle.getBundle("Configuracion");
         if ("es".equals(config.getString("lenguage"))) {
             propiedades = "Espannol_es_CO";
+            jDateFecha.setDateFormatString(config.getString("formatoFecha"));
         } else if ("en".equals(config.getString("lenguage"))) {
             propiedades = "Ingles_en_US";
+            jDateFecha.setDateFormatString(config.getString("formatoFechaI"));
         }
         return propiedades;
     }
-    
-   /*ResourceBundle.getBundle(idioma): aca solamente estamos determinando
-    el idioma*/
-    
+        
+    /*ResourceBundle.getBundle(idioma): aca solamente estamos determinando
+     el idioma*/
     /*getString("btnGuardar")): buscara la etiqueta con el nombre "btnGuardar"
      y devolvera el valor*/
     private void obtenerLenguage() {

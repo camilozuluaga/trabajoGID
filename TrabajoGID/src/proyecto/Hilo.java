@@ -27,9 +27,7 @@ public final class Hilo extends Thread {
 
     JRCsvDataSource dataSource;
 
-    public Hilo(String str) {
-        super(str);
-    }
+  
 
     private JRCsvDataSource getDataSource() throws URISyntaxException, JRException {
         String[] nombreColumnas = new String[]{"Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Genero", "Ciudad Residencia", "EPS"};
