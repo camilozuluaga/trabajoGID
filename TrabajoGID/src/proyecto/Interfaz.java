@@ -8,18 +8,13 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.PrintWriter;
-import java.net.URISyntaxException;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
-import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.StringTokenizer;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
@@ -61,9 +56,10 @@ public final class Interfaz extends javax.swing.JFrame {
     FileWriter fichero = null;
     /*Clase para escribir diferentes tipos de elementos*/
     PrintWriter pw = null;
+    String separador = System.getProperty("file.separator");
     /*Variable de tipo File donde le damos la ruta donde se encuentra nuestro 
      archivo tanto para ser leido como modificado*/
-    File file = new File("C:/Users/jucazuse/Documents/NetBeansProjects/TrabajoGID/src/archivo/registro.txt");
+    File file = new File(System.getProperty("user.dir").concat(separador).concat("registro.txt"));
     Calendar annoSistema = new GregorianCalendar();
     /*esta variable es el año del sistema */
     public int anno = annoSistema.get(Calendar.YEAR);
@@ -71,6 +67,7 @@ public final class Interfaz extends javax.swing.JFrame {
     /*lee una secuencia de archivo CSV*/
     JRCsvDataSource dataSource;
     Hilo hilo;
+
     /**
      * Creates new form Interfaz
      */
@@ -82,14 +79,11 @@ public final class Interfaz extends javax.swing.JFrame {
         cargarTabla();
         idioma = configLenguage();
         obtenerLenguage();
-        
-       
-        Date d = new Date();
-        DateFormat dt1 = DateFormat.getDateInstance(DateFormat.FULL, new Locale("en"));
-        System.out.println(dt1.format(d));
+        System.out.println(System.getProperty("user.dir"));
+        System.out.println(System.getProperty("file.separator"));
         hilo = new Hilo();
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -283,7 +277,7 @@ public final class Interfaz extends javax.swing.JFrame {
 
         /*Aqui obtenemos la fecha del JDateChooser*/
         Date date = jDateFecha.getDate();
-        
+
 
         /*preparamos el formato que se le dara a la fecha.
          de esta forma es que se le da el formato a la fecha
@@ -318,7 +312,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
-     hilo.start();
+        hilo.start();
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
@@ -386,7 +380,7 @@ public final class Interfaz extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -570,24 +564,20 @@ public final class Interfaz extends javax.swing.JFrame {
      caso el punto y como (;) y guarda en un array 
      las posiciones en las que va quedando la informacion*/
     public void compararDocumento() {
+        Scanner scan;
         try {
-            Scanner scan;
-            try {
-                scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
-                while (scan.hasNext()) {
-                    fila = scan.nextLine();
-                    posiciones = fila.split(";");
-                    if (posiciones[1].equals(txtIdentificacion.getText())) {
-                        System.out.println("posicion " + posiciones[1]);
-                        JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("validarCedula"),
-                                ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
-                        btnGuardar.setEnabled(false);
-                        txtIdentificacion.setText("");
-                    }
-                    posiciones = null;
+            scan = new Scanner(new File(System.getProperty("user.dir").concat(separador).concat("registro.txt")));
+            while (scan.hasNext()) {
+                fila = scan.nextLine();
+                posiciones = fila.split(";");
+                if (posiciones[1].equals(txtIdentificacion.getText())) {
+                    System.out.println("posicion " + posiciones[1]);
+                    JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("validarCedula"),
+                            ("Validacion"), JOptionPane.INFORMATION_MESSAGE);
+                    btnGuardar.setEnabled(false);
+                    txtIdentificacion.setText("");
                 }
-            } catch (URISyntaxException ex) {
-                Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
+                posiciones = null;
             }
 
         } catch (FileNotFoundException x) {
@@ -604,7 +594,7 @@ public final class Interfaz extends javax.swing.JFrame {
     public void cargarTabla() {
         try {
             modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-            Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
+            Scanner scan = new Scanner(new File(System.getProperty("user.dir").concat(separador).concat("registro.txt")));
             while (scan.hasNext()) {
                 fila = scan.nextLine();//devuelve la siguiente linea del fichero
                 posiciones = fila.split(";");
@@ -622,8 +612,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 modeloTabla.addRow(tabla);
                 posiciones = null;
             }
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
@@ -637,7 +625,7 @@ public final class Interfaz extends javax.swing.JFrame {
      */
     public void buscarRegistrados() {
         try {
-            Scanner scan = new Scanner(new File(getClass().getResource("/archivo/registro.txt").toURI()));
+            Scanner scan = new Scanner(new File(System.getProperty("user.dir").concat(separador).concat("registro.txt")));
             while (scan.hasNext()) {
                 fila = scan.nextLine();
                 posiciones = fila.split(";");
@@ -651,8 +639,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 }
                 posiciones = null;
             }
-        } catch (URISyntaxException ex) {
-            Logger.getLogger(Interfaz.class.getName()).log(Level.SEVERE, null, ex);
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
@@ -686,7 +672,7 @@ public final class Interfaz extends javax.swing.JFrame {
         }
         return propiedades;
     }
-        
+
     /*ResourceBundle.getBundle(idioma): aca solamente estamos determinando
      el idioma*/
     /*getString("btnGuardar")): buscara la etiqueta con el nombre "btnGuardar"
