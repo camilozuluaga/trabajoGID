@@ -4,9 +4,12 @@
  */
 package proyecto;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -67,11 +70,13 @@ public final class Interfaz extends javax.swing.JFrame {
     /*lee una secuencia de archivo CSV*/
     JRCsvDataSource dataSource;
     Hilo hilo;
+    SimpleDateFormat sdf;
 
     /**
      * Creates new form Interfaz
      */
     public Interfaz() {
+
         initComponents();
         llenarCbIdentificacion();
         llenarCbCiudadResidencia();
@@ -79,9 +84,8 @@ public final class Interfaz extends javax.swing.JFrame {
         cargarTabla();
         idioma = configLenguage();
         obtenerLenguage();
-        System.out.println(System.getProperty("user.dir"));
-        System.out.println(System.getProperty("file.separator"));
         hilo = new Hilo();
+
     }
 
     /**
@@ -100,7 +104,6 @@ public final class Interfaz extends javax.swing.JFrame {
         lbFechaNacimiento = new javax.swing.JLabel();
         btnGuardar = new javax.swing.JButton();
         cbIdentificacion = new javax.swing.JComboBox();
-        jDateFecha = new com.toedter.calendar.JDateChooser();
         cbCiudadR = new javax.swing.JComboBox();
         lbCiudadResidencia = new javax.swing.JLabel();
         txtNombre = new javax.swing.JTextField();
@@ -113,6 +116,7 @@ public final class Interfaz extends javax.swing.JFrame {
         rbFemenino = new javax.swing.JRadioButton();
         rbMasculino = new javax.swing.JRadioButton();
         cbEPS = new javax.swing.JComboBox();
+        jDateFecha = new com.toedter.calendar.JDateChooser();
         jLayeredPane2 = new javax.swing.JLayeredPane();
         lbBuscar = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -146,8 +150,6 @@ public final class Interfaz extends javax.swing.JFrame {
 
         cbIdentificacion.setBounds(170, 20, 180, 30);
         jLayeredPane1.add(cbIdentificacion, javax.swing.JLayeredPane.DEFAULT_LAYER);
-        jDateFecha.setBounds(170, 110, 180, 30);
-        jLayeredPane1.add(jDateFecha, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         cbCiudadR.setBounds(170, 160, 180, 30);
         jLayeredPane1.add(cbCiudadR, javax.swing.JLayeredPane.DEFAULT_LAYER);
@@ -198,6 +200,8 @@ public final class Interfaz extends javax.swing.JFrame {
 
         cbEPS.setBounds(510, 160, 190, 30);
         jLayeredPane1.add(cbEPS, javax.swing.JLayeredPane.DEFAULT_LAYER);
+        jDateFecha.setBounds(170, 110, 180, 30);
+        jLayeredPane1.add(jDateFecha, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         jLayeredPane2.setBorder(javax.swing.BorderFactory.createTitledBorder("Listado Usuarios"));
         lbBuscar.setBounds(10, 30, 160, 30);
@@ -250,9 +254,10 @@ public final class Interfaz extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLayeredPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 1094, Short.MAX_VALUE)
+                    .addComponent(jLayeredPane1))
                 .addContainerGap())
-            .addComponent(jLayeredPane1, javax.swing.GroupLayout.Alignment.TRAILING)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -269,46 +274,54 @@ public final class Interfaz extends javax.swing.JFrame {
 
     @SuppressWarnings("empty-statement")
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-        /*esta variable obtiene el año de nacimiento*/
-        annoNaci = jDateFecha.getCalendar().get(Calendar.YEAR);
+        if (!cbIdentificacion.getSelectedItem().equals("-- SELECCIONE --")
+                && (!txtNombre.getText().isEmpty()) && (!txtIdentificacion.getText().isEmpty())
+                && (!txtApellidos.getText().isEmpty()) && (!cbCiudadR.getSelectedItem().equals("-- SELECCIONE --"))
+                && (!cbEPS.getSelectedItem().equals("-- SELECCIONE --"))
+                && (jDateFecha.getDate() != null)) {
+            
+            annoNaci = jDateFecha.getCalendar().get(Calendar.YEAR);
+            /*esta variable nos muestra la edad*/
+            edad = (anno - annoNaci);
+            System.out.println("edad " + edad);
+            if ((18 < edad) && (cbIdentificacion.getSelectedItem().equals("Cedula")) || (18 > edad)
+                    && (cbIdentificacion.getSelectedItem().equals("Tarjeta Identidad"))) {
+                /*Aqui obtenemos la fecha del JDateChooser*/
+                Date date = jDateFecha.getDate();
 
-        /*esta variable nos muestra la edad*/
-        edad = (anno - annoNaci);
+                /*este es una condicion con operadores ternarios para ver el sexo */
+                sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
 
-        /*Aqui obtenemos la fecha del JDateChooser*/
-        Date date = jDateFecha.getDate();
+                /*con esto le damos el modelo a la tabla */
+                modeloTabla = (DefaultTableModel) jTRegistro.getModel();
 
+                /*Nombre de las filas que va a tener la tabla*/
+                Object nuevo[] = {
+                    contador++, cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
+                    txtApellidos.getText(), sdf.format(date), edad, sexo,
+                    cbCiudadR.getSelectedItem(), cbEPS.getSelectedItem()
+                };
+                /*añadimos las filas a la tabla */
+                modeloTabla.addRow(nuevo);
 
-        /*preparamos el formato que se le dara a la fecha.
-         de esta forma es que se le da el formato a la fecha
-         dt.format(date)*/
-        SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
-
-        /*este es una condicion con operadores ternarios para ver el sexo */
-        sexo = (rbMasculino.isSelected()) ? "Masculino" : "Femenino";
-
-        /*con esto le damos el modelo a la tabla */
-        modeloTabla = (DefaultTableModel) jTRegistro.getModel();
-
-        /*Nombre de las filas que va a tener la tabla*/
-        Object nuevo[] = {
-            contador++, cbIdentificacion.getSelectedItem(), txtIdentificacion.getText(), txtNombre.getText(),
-            txtApellidos.getText(), dt.format(date), edad, sexo,
-            cbCiudadR.getSelectedItem(), cbEPS.getSelectedItem()
-        };
-
-        /*añadimos las filas a la tabla */
-        modeloTabla.addRow(nuevo);
-
-        /*metodo para guardar el archivo */
-        guardarArchivo();
-
-        /*limpiamos los campos de texto despues de haber guardado 
-         la informacion*/
-        txtIdentificacion.setText("");
-        txtNombre.setText("");
-        txtApellidos.setText("");
-
+                /*metodo para guardar el archivo */
+                guardarArchivo();
+                
+                cbIdentificacion.setSelectedItem("-- SELECCIONE --");
+                cbCiudadR.setSelectedItem("-- SELECCIONE --");
+                cbEPS.setSelectedItem("-- SELECCIONE --");
+                txtIdentificacion.setText("");
+                txtNombre.setText("");
+                txtApellidos.setText("");
+            } else {
+                JOptionPane.showMessageDialog(this, "Señor Usuario su Tipo de Documento no Esta Correcto",
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Señor Usuario Todos Los Campos Deben de Estar Llenos",
+                    "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnInformeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInformeActionPerformed
@@ -316,8 +329,6 @@ public final class Interfaz extends javax.swing.JFrame {
     }//GEN-LAST:event_btnInformeActionPerformed
 
     private void txtIdentificacionKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtIdentificacionKeyReleased
-        compararDocumento();
-
         /*condicion para validar los campos de texto para que solo contengan 
          numeros*/
         if (!txtIdentificacion.getText().matches("[ 0-9 ]*")) {
@@ -333,6 +344,7 @@ public final class Interfaz extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(this, ResourceBundle.getBundle(idioma).getString("datosCedula"), "VALIDACION", JOptionPane.ERROR_MESSAGE);
             txtIdentificacion.setText("");
         }
+        compararDocumento();
     }//GEN-LAST:event_txtIdentificacionKeyReleased
 
     private void btnGuardarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btnGuardarMouseReleased
@@ -441,12 +453,14 @@ public final class Interfaz extends javax.swing.JFrame {
     // End of variables declaration//GEN-END:variables
 
     private void llenarCbIdentificacion() {
+        cbIdentificacion.addItem("-- SELECCIONE --");
         cbIdentificacion.addItem("Cedula");
         cbIdentificacion.addItem("Tarjeta Identidad");
         cbIdentificacion.addItem("NN");
     }
 
     private void llenarCbCiudadResidencia() {
+        cbCiudadR.addItem("-- SELECCIONE --");
         cbCiudadR.addItem("Alcala");
         cbCiudadR.addItem("Andalucia");
         cbCiudadR.addItem("Ansermanuevo");
@@ -492,6 +506,7 @@ public final class Interfaz extends javax.swing.JFrame {
     }
 
     private void llenarCbEPS() {
+        cbEPS.addItem("-- SELECCIONE --");
         cbEPS.addItem("Saludcoop");
         cbEPS.addItem("Coomeva");
         cbEPS.addItem("Quiron");
@@ -503,13 +518,11 @@ public final class Interfaz extends javax.swing.JFrame {
     private void guardarArchivo() {
         /*esta es la fecha del jDateChooser*/
         Date date = jDateFecha.getDate();
-        SimpleDateFormat dt = new SimpleDateFormat("dd/MMM/yyyy");
         /*token: subString*/
         /*divide una cadena en tokens. atendiendo a un delimitador en concreto*/
         StringTokenizer st = new StringTokenizer("/n", ";");
         /*hasMoreTokens: Mira si hay mas tokens en el array de token que tiene 
          StringTokenizer*/
-
         /*nextToken: devuelve el siguiente token*/
         try {
             fichero = new FileWriter(file, true);
@@ -525,7 +538,7 @@ public final class Interfaz extends javax.swing.JFrame {
                 pw.print(";");
                 pw.print(txtApellidos.getText());
                 pw.print(";");
-                pw.print(dt.format(date));
+                pw.print(sdf.format(date));
                 pw.print(";");
                 pw.print(edad);
                 pw.print(";");
@@ -579,7 +592,6 @@ public final class Interfaz extends javax.swing.JFrame {
                 }
                 posiciones = null;
             }
-
         } catch (FileNotFoundException x) {
             System.out.println("No se pudo encontrar el archivo");
         }
@@ -644,7 +656,6 @@ public final class Interfaz extends javax.swing.JFrame {
         }
 
     }
-
     /*ResourceBundle: PAQUETE DE RECURSOS*/
     /*getBundle: obtiene un ResourceBundle utilizando
      el nombre base especificado
@@ -659,16 +670,17 @@ public final class Interfaz extends javax.swing.JFrame {
      * parametros: Clave para la cadena deseada.
      * devuelve: la cadena de la clave dada 
      */
+
     private String configLenguage() {
         ResourceBundle config;
         String propiedades = "Espannol_es_CO";
         config = ResourceBundle.getBundle("Configuracion");
-        if ("es".equals(config.getString("lenguage"))) {
+        if ("es".equals(config.getString("lenguaje"))) {
             propiedades = "Espannol_es_CO";
-            jDateFecha.setDateFormatString(config.getString("formatoFecha"));
-        } else if ("en".equals(config.getString("lenguage"))) {
+            sdf = new SimpleDateFormat(config.getString("formatoFecha"));
+        } else if ("en".equals(config.getString("lenguaje"))) {
             propiedades = "Ingles_en_US";
-            jDateFecha.setDateFormatString(config.getString("formatoFechaI"));
+            sdf = new SimpleDateFormat(config.getString("formatoFechaI"));
         }
         return propiedades;
     }
@@ -695,6 +707,21 @@ public final class Interfaz extends javax.swing.JFrame {
             System.out.println("error no se pudo encontrar el archivo " + e);
         } catch (Exception e) {
             System.out.println("error general " + e);
+        }
+    }
+    
+    public void leer() {
+        File f = new File(System.getProperty("user.dir").concat(separador).concat("registro.txt"));
+        BufferedReader entrada;
+        try {
+            entrada = new BufferedReader(new FileReader(f));
+            String linea;
+            while (entrada.ready()) {
+                linea = entrada.readLine();
+                System.out.println(linea);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

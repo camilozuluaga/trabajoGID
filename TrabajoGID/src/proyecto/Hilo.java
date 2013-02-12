@@ -26,13 +26,12 @@ import net.sf.jasperreports.view.JasperViewer;
 public final class Hilo extends Thread {
 
     JRCsvDataSource dataSource;
-
+    String separador=System.getProperty("file.separator");
   
 
     private JRCsvDataSource getDataSource() throws URISyntaxException, JRException {
         String[] nombreColumnas = new String[]{"Tipo Identificacion", "Identificacion", "Nombre", "Apellido", "Fecha Nacimiento", "Edad", "Genero", "Ciudad Residencia", "EPS"};
-        File f1 = null;
-        f1 = new File(getClass().getResource("/archivo/registro.txt").toURI());
+        File f1 = new File(System.getProperty("user.dir").concat(separador).concat("registro.txt"));
         String filePath = f1.getAbsolutePath().toString();
         dataSource = new JRCsvDataSource(filePath);
         dataSource.setFieldDelimiter(';');
@@ -42,14 +41,20 @@ public final class Hilo extends Thread {
 
     public void reporte() {
         try {
-            File f = null;
-            f = new File(getClass().getResource("/archivo/registrados.jasper").toURI());
+            File f = new File(System.getProperty("user.dir").concat(separador).concat("registrados.jasper"));
             String rutaAbsoluta = f.getAbsolutePath().toString();
+            System.out.println("ruta "+rutaAbsoluta);
+            System.out.println("f "+ f);
             JasperReport reporte = (JasperReport) JRLoader.loadObjectFromFile(rutaAbsoluta);
             JasperPrint jasperPrint = JasperFillManager.fillReport(reporte, null, getDataSource());
+            
+            /*esto nos permite visualizar nuestro reporte de forma mas ligera
+             sin necesidad de buscar el archivo pdf*/
             JasperViewer ver = new JasperViewer(jasperPrint);
             ver.setTitle("Registrados");
             ver.setVisible(true);
+           
+            /*este nos imprime el archivo y no lo guarda en la carpeta del proyecto*/
             JRExporter exporter = new JRPdfExporter();
             exporter.setParameter(JRExporterParameter.JASPER_PRINT, jasperPrint);
             exporter.setParameter(JRExporterParameter.OUTPUT_FILE, new java.io.File("Usuarios Registrados.pdf"));
