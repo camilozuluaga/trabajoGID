@@ -18,6 +18,8 @@ import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import java.util.StringTokenizer;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import net.sf.jasperreports.engine.data.JRCsvDataSource;
@@ -71,7 +73,8 @@ public final class Interfaz extends javax.swing.JFrame {
     JRCsvDataSource dataSource;
     Hilo hilo;
     SimpleDateFormat sdf;
-
+    Icon imgGuardar=new ImageIcon(System.getProperty("user.dir").concat(separador).concat("Guardar.png"));
+    Icon imgReporte=new ImageIcon(System.getProperty("user.dir").concat(separador).concat("Reporte.png"));
     /**
      * Creates new form Interfaz
      */
@@ -85,7 +88,8 @@ public final class Interfaz extends javax.swing.JFrame {
         idioma = configLenguage();
         obtenerLenguage();
         hilo = new Hilo();
-
+        btnGuardar.setIcon(imgGuardar);
+        btnInforme.setIcon(imgReporte);
     }
 
     /**
@@ -134,7 +138,6 @@ public final class Interfaz extends javax.swing.JFrame {
         lbFechaNacimiento.setBounds(20, 110, 150, 30);
         jLayeredPane1.add(lbFechaNacimiento, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnGuardar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/archivo/1357775393_page_save.png"))); // NOI18N
         btnGuardar.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 btnGuardarMouseReleased(evt);
@@ -228,7 +231,6 @@ public final class Interfaz extends javax.swing.JFrame {
         jScrollPane2.setBounds(10, 70, 1080, 120);
         jLayeredPane2.add(jScrollPane2, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
-        btnInforme.setIcon(new javax.swing.ImageIcon(getClass().getResource("/archivo/1357775453_my-reports.png"))); // NOI18N
         btnInforme.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnInformeActionPerformed(evt);
@@ -666,7 +668,6 @@ public final class Interfaz extends javax.swing.JFrame {
      minada*/
     /*getString: Obtiene una cadena dada de ResourceBundle
      o uno de sus padres
-      
      * parametros: Clave para la cadena deseada.
      * devuelve: la cadena de la clave dada 
      */

@@ -1,2 +1,0 @@
-Cedula;1113310128;juan camilo;zuluaga serna ;02/24/1994;19;Masculino;Sevilla;Casur;
-Cedula;29331443;gloria patricia ;serna escobar;04/11/1969;44;Femenino;Sevilla;Casur;
